@@ -126,7 +126,7 @@
             </div>
         </div>
         <div class="about-bg">
-            <img src="{{ asset('images/about/bg-1.png') }}" alt="">
+            <img src="{{ asset($site->aboutBgUrl()) }}" alt="">
         </div>
     </section>
     @endif

@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -40,7 +39,6 @@ class UserController extends Controller
             'is_admin' => 'boolean',
         ]);
 
-        $validated['password'] = Hash::make($validated['password']);
         $validated['is_admin'] = $request->has('is_admin');
 
         User::create($validated);
@@ -77,9 +75,7 @@ class UserController extends Controller
             'is_admin' => 'boolean',
         ]);
 
-        if ($request->filled('password')) {
-            $validated['password'] = Hash::make($validated['password']);
-        } else {
+        if (!$request->filled('password')) {
             unset($validated['password']);
         }
 

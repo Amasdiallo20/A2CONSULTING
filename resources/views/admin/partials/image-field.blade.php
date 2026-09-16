@@ -1,8 +1,8 @@
 <div class="mb-3">
     <label for="{{ $name }}" class="form-label">{{ $label ?? 'Image' }}</label>
-    @if(!empty($current))
+            @if(!empty($current))
         <div class="mb-2">
-            <img src="{{ asset($current) }}" alt="Image actuelle" class="img-thumbnail" style="max-width: 200px; max-height: 200px;">
+            <img src="{{ asset($current) }}" alt="Image actuelle" class="img-thumbnail" style="max-width: {{ $wide ?? false ? '100%' : '200px' }}; max-height: {{ $wide ?? false ? '140px' : '200px' }}; object-fit: cover;">
             <p class="small text-muted mt-1">Image actuelle — choisissez un fichier pour la remplacer</p>
         </div>
     @endif

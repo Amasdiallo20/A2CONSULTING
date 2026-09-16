@@ -19,11 +19,19 @@ class AppServiceProvider extends ServiceProvider
             \Illuminate\Support\Facades\URL::forceScheme('https');
         }
 
+        View::composer('*', function ($view) {
+            static $site = false;
+            if ($site === false) {
+                $site = \Illuminate\Support\Facades\Schema::hasTable('site_settings')
+                    ? SiteSetting::current()
+                    : null;
+            }
+            if (! $view->offsetExists('site')) {
+                $view->with('site', $site);
+            }
+        });
+
         View::composer(['layouts.app', 'admin.layouts.app'], function ($view) {
-            $site = \Illuminate\Support\Facades\Schema::hasTable('site_settings')
-                ? SiteSetting::current()
-                : null;
-            $view->with('site', $site);
             $view->with('cartCount', \App\Services\Cart::count());
         });
     }

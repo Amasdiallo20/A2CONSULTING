@@ -2,7 +2,7 @@
 @section('title', 'Paiement Mobile Money')
 @section('content')
     @include('partials.preloader')
-    @include('partials.page-banner', ['title' => 'Paiement Mobile Money', 'bannerImage' => 'images/page-banner-5.jpg'])
+    @include('partials.page-banner', ['title' => 'Paiement Mobile Money', 'bannerKey' => 'shop'])
 
     <section class="pt-90 pb-120 gray-bg">
         <div class="container">

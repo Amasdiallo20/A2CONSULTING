@@ -4,7 +4,6 @@ namespace Database\Seeders;
 
 use App\Models\User;
 use Illuminate\Database\Seeder;
-use Illuminate\Support\Facades\Hash;
 
 class AdminUserSeeder extends Seeder
 {
@@ -13,12 +12,12 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        // Créer un utilisateur administrateur par défaut
-        User::firstOrCreate(
+        // Le cast "hashed" du modèle User hash déjà le mot de passe.
+        User::updateOrCreate(
             ['email' => 'admin@a2consulting.com'],
             [
                 'name' => 'Administrateur',
-                'password' => Hash::make('admin123'),
+                'password' => 'admin123',
                 'is_admin' => true,
             ]
         );

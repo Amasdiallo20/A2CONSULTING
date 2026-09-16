@@ -94,6 +94,35 @@
                 </div>
             </div>
 
+            <h5 class="mb-3 mt-2">Identité visuelle</h5>
+            <p class="text-muted">Logo, favicon et décor de la section À propos de l’accueil.</p>
+            <div class="row">
+                <div class="col-md-4">
+                    @include('admin.partials.image-field', ['name' => 'logo_image', 'current' => $setting->logoUrl(), 'label' => 'Logo (en-tête et pied de page)'])
+                </div>
+                <div class="col-md-4">
+                    @include('admin.partials.image-field', ['name' => 'favicon_image', 'current' => $setting->faviconUrl(), 'label' => 'Favicon (onglet du navigateur)'])
+                </div>
+                <div class="col-md-4">
+                    @include('admin.partials.image-field', ['name' => 'about_bg_image', 'current' => $setting->aboutBgUrl(), 'label' => 'Décor À propos (accueil)'])
+                </div>
+            </div>
+
+            <h5 class="mb-3 mt-2">Bannières des pages</h5>
+            <p class="text-muted">Images de fond affichées en haut de chaque page. Envoyez un fichier pour remplacer l’image actuelle.</p>
+            <div class="row">
+                @foreach(\App\Models\SiteSetting::PAGE_BANNERS as $key => $meta)
+                    <div class="col-md-6">
+                        @include('admin.partials.image-field', [
+                            'name' => 'banner_'.$key,
+                            'current' => $setting->pageBanner($key),
+                            'label' => $meta['label'],
+                            'wide' => true,
+                        ])
+                    </div>
+                @endforeach
+            </div>
+
             <h5 class="mb-3 mt-2">Paiement Mobile Money</h5>
             <p class="text-muted">Numéros qui recevront les paiements des clients.</p>
             <div class="row">

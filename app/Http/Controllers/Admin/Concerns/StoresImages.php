@@ -20,9 +20,9 @@ trait StoresImages
 
             /** @var UploadedFile $file */
             $file = $request->file($field);
-            $path = $file->store($directory, 'public');
+            $path = $file->store($directory, 'uploads');
 
-            return 'storage/'.$path;
+            return 'uploads/'.$path;
         }
 
         return $keepExisting ? $current : null;
@@ -30,6 +30,15 @@ trait StoresImages
 
     protected function deleteStoredImage(?string $path): void
     {
+        if ($path && str_starts_with($path, 'uploads/')) {
+            $full = public_path($path);
+            if (is_file($full)) {
+                @unlink($full);
+            }
+
+            return;
+        }
+
         if ($path && str_starts_with($path, 'storage/')) {
             $relative = str_replace('storage/', '', $path);
             if (Storage::disk('public')->exists($relative)) {

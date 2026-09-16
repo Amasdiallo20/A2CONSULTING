@@ -6,6 +6,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class SiteSetting extends Model
 {
+    public const PAGE_BANNERS = [
+        'about' => ['label' => 'À propos', 'default' => 'images/page-banner-1.jpg'],
+        'courses' => ['label' => 'Formations', 'default' => 'images/page-banner-2.jpg'],
+        'services' => ['label' => 'Services', 'default' => 'images/page-banner-1.jpg'],
+        'events' => ['label' => 'Événements', 'default' => 'images/page-banner-3.jpg'],
+        'teachers' => ['label' => 'Formateurs', 'default' => 'images/page-banner-3.jpg'],
+        'blog' => ['label' => 'Actualités / Blog', 'default' => 'images/page-banner-4.jpg'],
+        'shop' => ['label' => 'Boutique / Panier', 'default' => 'images/page-banner-5.jpg'],
+        'contact' => ['label' => 'Contact', 'default' => 'images/page-banner-6.jpg'],
+    ];
+
     protected $fillable = [
         'site_name',
         'phone',
@@ -24,6 +35,17 @@ class SiteSetting extends Model
         'about_title',
         'about_text',
         'about_image',
+        'logo_image',
+        'favicon_image',
+        'about_bg_image',
+        'banner_about',
+        'banner_courses',
+        'banner_services',
+        'banner_events',
+        'banner_teachers',
+        'banner_blog',
+        'banner_shop',
+        'banner_contact',
         'orange_money_number',
         'mtn_money_number',
         'moov_money_number',
@@ -39,6 +61,33 @@ class SiteSetting extends Model
                 'about_title' => 'À propos',
             ]
         );
+    }
+
+    public function pageBanner(string $key): string
+    {
+        $column = 'banner_'.$key;
+        $custom = $this->{$column} ?? null;
+
+        if (filled($custom)) {
+            return $custom;
+        }
+
+        return self::PAGE_BANNERS[$key]['default'] ?? 'images/page-banner-1.jpg';
+    }
+
+    public function logoUrl(): string
+    {
+        return filled($this->logo_image) ? $this->logo_image : 'images/logo-mark.png';
+    }
+
+    public function faviconUrl(): string
+    {
+        return filled($this->favicon_image) ? $this->favicon_image : 'images/favicon.png';
+    }
+
+    public function aboutBgUrl(): string
+    {
+        return filled($this->about_bg_image) ? $this->about_bg_image : 'images/about/bg-1.png';
     }
 
     public function mobileMoneyNumber(?string $operator): ?string

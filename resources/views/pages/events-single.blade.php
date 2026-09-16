@@ -2,7 +2,7 @@
 @section('title', $event->title)
 @section('content')
     @include('partials.preloader')
-    @include('partials.page-banner', ['title' => $event->title, 'bannerImage' => 'images/page-banner-3.jpg'])
+    @include('partials.page-banner', ['title' => $event->title, 'bannerKey' => 'events'])
 
     <section id="event-singel" class="pt-90 pb-120 gray-bg">
         <div class="container">

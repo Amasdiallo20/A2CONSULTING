@@ -13,7 +13,7 @@
     <title>@yield('title', $site?->site_name ?? 'A2 Consulting')</title>
     
     <!--====== Favicon Icon ======-->
-    <link rel="shortcut icon" href="{{ asset('images/favicon.png') }}" type="image/png">
+    <link rel="shortcut icon" href="{{ asset($site?->faviconUrl() ?? 'images/favicon.png') }}" type="image/png">
 
     <!--====== Slick css ======-->
     <link rel="stylesheet" href="{{ asset('css/slick.css') }}">

@@ -21,8 +21,9 @@ class SettingController extends Controller
     public function update(Request $request)
     {
         $setting = SiteSetting::current();
+        $imageFields = $this->imageFields();
 
-        $validated = $request->validate([
+        $rules = [
             'site_name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:255',
             'email' => 'nullable|email|max:255',
@@ -34,22 +35,41 @@ class SettingController extends Controller
             'linkedin' => 'nullable|string|max:255',
             'hero_title' => 'nullable|string|max:255',
             'hero_subtitle' => 'nullable|string',
-            'hero_image' => $this->imageValidationRule(),
             'hero_button_text' => 'nullable|string|max:255',
             'hero_button_url' => 'nullable|string|max:255',
             'about_title' => 'nullable|string|max:255',
             'about_text' => 'nullable|string',
-            'about_image' => $this->imageValidationRule(),
             'orange_money_number' => 'nullable|string|max:50',
             'mtn_money_number' => 'nullable|string|max:50',
             'moov_money_number' => 'nullable|string|max:50',
-        ]);
+        ];
 
-        $validated['hero_image'] = $this->storeImage($request, 'hero_image', 'settings', $setting->hero_image, true);
-        $validated['about_image'] = $this->storeImage($request, 'about_image', 'settings', $setting->about_image, true);
+        foreach ($imageFields as $field) {
+            $rules[$field] = $this->imageValidationRule();
+        }
+
+        $validated = $request->validate($rules);
+
+        foreach ($imageFields as $field) {
+            $validated[$field] = $this->storeImage($request, $field, 'settings', $setting->{$field}, true);
+        }
 
         $setting->update($validated);
 
         return back()->with('success', 'Paramètres du site enregistrés.');
+    }
+
+    /**
+     * @return list<string>
+     */
+    private function imageFields(): array
+    {
+        $fields = ['hero_image', 'about_image', 'logo_image', 'favicon_image', 'about_bg_image'];
+
+        foreach (array_keys(SiteSetting::PAGE_BANNERS) as $key) {
+            $fields[] = 'banner_'.$key;
+        }
+
+        return $fields;
     }
 }

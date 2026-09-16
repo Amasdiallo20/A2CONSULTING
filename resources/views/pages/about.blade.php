@@ -2,7 +2,7 @@
 @section('title', 'À propos')
 @section('content')
     @include('partials.preloader')
-    @include('partials.page-banner', ['title' => 'À propos', 'bannerImage' => 'images/page-banner-1.jpg'])
+    @include('partials.page-banner', ['title' => 'À propos', 'bannerKey' => 'about'])
 
     <section id="about-page" class="pt-70 pb-110">
         <div class="container">

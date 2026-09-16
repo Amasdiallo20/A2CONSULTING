@@ -1,4 +1,10 @@
-<section id="page-banner" class="pt-105 pb-110 bg_cover" data-overlay="8" style="background-image: url({{ asset($bannerImage ?? 'images/page-banner-1.jpg') }})">
+@php
+    $bannerKey = $bannerKey ?? null;
+    $bannerImage = $bannerImage
+        ?? (isset($site) && $bannerKey ? $site->pageBanner($bannerKey) : null)
+        ?? 'images/page-banner-1.jpg';
+@endphp
+<section id="page-banner" class="pt-105 pb-110 bg_cover" data-overlay="8" style="background-image: url({{ asset($bannerImage) }})">
     <div class="container">
         <div class="row">
             <div class="col-lg-12">
