@@ -6,43 +6,97 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('title', 'Administration') - A2 Consulting</title>
     
-    <!-- Bootstrap CSS -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:600,700|Roboto:400,500,700" rel="stylesheet">
-    <!-- Font Awesome -->
+    <link rel="stylesheet" href="{{ asset('vendor/bootstrap/bootstrap.min.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
         :root {
             --primary-color: rgba(1, 104, 163, 1);
             --secondary-color: rgba(235, 174, 98, 1);
+            --admin-sidebar-width: 260px;
         }
-        
+
+        * { box-sizing: border-box; }
+
+        html, body {
+            margin: 0;
+            min-height: 100%;
+        }
+
         body {
-            background-color: #f8f9fa;
+            background-color: #f4f7fb;
+            font-family: 'Roboto', sans-serif;
         }
-        
-        .sidebar {
+
+        .admin-shell {
+            display: flex;
+            align-items: stretch;
             min-height: 100vh;
-            background: linear-gradient(180deg, var(--primary-color) 0%, rgba(1, 104, 163, 0.9) 100%);
+        }
+
+        .sidebar {
+            width: var(--admin-sidebar-width);
+            flex: 0 0 var(--admin-sidebar-width);
+            min-height: 100vh;
+            background: linear-gradient(180deg, var(--primary-color) 0%, rgba(1, 104, 163, 0.92) 100%);
             color: white;
+            padding: 16px 0 24px;
+            position: sticky;
+            top: 0;
+            align-self: flex-start;
+            overflow-y: auto;
+            max-height: 100vh;
+        }
+
+        .sidebar .nav {
+            list-style: none;
+            margin: 0;
             padding: 0;
         }
-        
-        .sidebar .nav-link {
-            color: rgba(255, 255, 255, 0.8);
-            padding: 12px 20px;
-            border-left: 3px solid transparent;
+
+        .sidebar .nav-item {
+            list-style: none;
         }
-        
+
+        .sidebar .nav-link {
+            display: flex;
+            align-items: center;
+            color: rgba(255, 255, 255, 0.88);
+            padding: 11px 20px;
+            border-left: 3px solid transparent;
+            text-decoration: none;
+        }
+
         .sidebar .nav-link:hover,
         .sidebar .nav-link.active {
-            background-color: rgba(255, 255, 255, 0.1);
-            color: white;
+            background-color: rgba(255, 255, 255, 0.12);
+            color: #fff;
             border-left-color: var(--secondary-color);
         }
-        
+
+        .sidebar .nav-link .badge {
+            margin-left: auto;
+        }
+
         .main-content {
-            padding: 20px;
+            flex: 1 1 auto;
+            min-width: 0;
+            padding: 24px 28px;
+            background: #f4f7fb;
+        }
+
+        @media (max-width: 991.98px) {
+            .admin-shell {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                flex-basis: auto;
+                min-height: 0;
+                max-height: none;
+                position: relative;
+            }
         }
         
         .card {
@@ -103,11 +157,9 @@
     @stack('styles')
 </head>
 <body>
-    <div class="container-fluid">
-        <div class="row">
-            <!-- Sidebar -->
-            <nav class="col-md-3 col-lg-2 sidebar">
-                <div class="position-sticky pt-3">
+    <div class="admin-shell">
+            <nav class="sidebar">
+                <div>
                     <div class="px-3 mb-4">
                         <div class="bg-white rounded p-2 mb-2 text-center">
                             @include('partials.brand-logo')
@@ -211,8 +263,7 @@
                 </div>
             </nav>
             
-            <!-- Main content -->
-            <main class="col-md-9 ms-sm-auto col-lg-10 main-content">
+            <main class="main-content">
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}
@@ -229,11 +280,9 @@
                 
                 @yield('content')
             </main>
-        </div>
     </div>
-    
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script src="{{ asset('vendor/bootstrap/bootstrap.bundle.min.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/tinymce@6.8.4/tinymce.min.js" referrerpolicy="origin"></script>
     <script>
         if (document.querySelector('textarea.rich-editor')) {

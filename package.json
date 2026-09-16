@@ -3,7 +3,7 @@
     "private": true,
     "type": "module",
     "scripts": {
-        "build": "vite build",
+        "build": "vite build --outDir public/build --emptyOutDir && node scripts/sync-vite-output.js",
         "dev": "vite"
     },
     "devDependencies": {
