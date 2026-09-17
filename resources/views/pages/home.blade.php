@@ -6,28 +6,26 @@
     @include('partials.preloader')
 
     @if($site->hero_title || $site->hero_subtitle)
-    <section id="slider-part" class="slider-active">
-        <div class="single-slider bg_cover pt-150" style="background-image: url({{ asset($site->hero_image ?: 'images/slider/s-1.jpg') }})" data-overlay="4">
-            <div class="container">
-                <div class="row">
-                    <div class="col-xl-7 col-lg-9">
-                        <div class="slider-cont">
-                            @if($site->hero_title)
-                                <h1 data-animation="bounceInLeft" data-delay="1s">{{ $site->hero_title }}</h1>
-                            @endif
-                            @if($site->hero_subtitle)
-                                <p data-animation="fadeInUp" data-delay="1.3s">{{ $site->hero_subtitle }}</p>
-                            @endif
-                            @if($site->hero_button_text)
-                            <ul>
-                                <li>
-                                    <a data-animation="fadeInUp" data-delay="1.6s" class="main-btn" href="{{ $site->hero_button_url ?: route('courses.index') }}">
-                                        {{ $site->hero_button_text }}
-                                    </a>
-                                </li>
-                            </ul>
-                            @endif
-                        </div>
+    <section id="slider-part" class="hero-wrap">
+        <div class="container">
+            <div class="hero-banner">
+                <div class="hero-banner__media" style="background-image: url({{ asset($site->hero_image ?: 'images/slider/s-1.jpg') }})"></div>
+                <div class="hero-banner__overlay"></div>
+                <div class="hero-banner__glow" aria-hidden="true"></div>
+                <div class="hero-banner__panel">
+                    @if($site->hero_title)
+                        <h1>{{ $site->hero_title }}</h1>
+                    @endif
+                    @if($site->hero_subtitle)
+                        <p class="hero-banner__lead">{{ $site->hero_subtitle }}</p>
+                    @endif
+                    <div class="hero-banner__actions">
+                        @if($site->hero_button_text)
+                            <a class="main-btn" href="{{ $site->hero_button_url ?: route('courses.index') }}">
+                                {{ $site->hero_button_text }}
+                            </a>
+                        @endif
+                        <a class="hero-banner__ghost" href="{{ route('contact') }}">Nous contacter</a>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@
 @section('content')
 
     @include('partials.preloader')
-    @include('partials.page-banner', ['title' => 'Boutique', 'bannerKey' => 'shop'])
+    @include('partials.page-banner', ['title' => 'Boutique', 'subtitle' => 'Supports, produits et ressources', 'bannerKey' => 'shop'])
 
     <section id="shop-page" class="pt-120 pb-120 gray-bg">
         <div class="container">

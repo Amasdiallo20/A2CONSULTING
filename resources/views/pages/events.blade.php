@@ -2,7 +2,7 @@
 @section('title', 'Événements')
 @section('content')
     @include('partials.preloader')
-    @include('partials.page-banner', ['title' => 'Événements', 'bannerKey' => 'events'])
+    @include('partials.page-banner', ['title' => 'Événements', 'subtitle' => 'Rencontres, ateliers et sessions à venir', 'bannerKey' => 'events'])
 
     <section id="event-page" class="pt-90 pb-120 gray-bg">
         <div class="container">

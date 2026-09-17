@@ -2,7 +2,7 @@
 @section('title', 'Blog')
 @section('content')
     @include('partials.preloader')
-    @include('partials.page-banner', ['title' => 'Blog', 'bannerKey' => 'blog'])
+    @include('partials.page-banner', ['title' => 'Blog', 'subtitle' => 'Actualités, conseils et ressources', 'bannerKey' => 'blog'])
 
     <section id="blog-page" class="pt-90 pb-120 gray-bg">
         <div class="container">
