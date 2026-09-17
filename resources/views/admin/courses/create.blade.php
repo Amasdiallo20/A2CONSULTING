@@ -90,7 +90,7 @@
                         @enderror
                     </div>
                     
-                    <div class="mb-3">
+                    <div class="mb-3" id="course-price-field">
                         <label for="price" class="form-label">Prix (GNF)</label>
                         <input type="number" step="1" class="form-control @error('price') is-invalid @enderror" 
                                id="price" name="price" value="{{ old('price', 0) }}" min="0">
@@ -159,6 +159,29 @@
         </form>
     </div>
 </div>
+
+@push('scripts')
+<script>
+(function () {
+    const type = document.getElementById('price_type');
+    const field = document.getElementById('course-price-field');
+    const input = document.getElementById('price');
+    if (!type || !field || !input) return;
+
+    const sync = () => {
+        const paid = type.value === 'paid';
+        field.style.display = paid ? '' : 'none';
+        input.required = paid;
+        if (!paid) {
+            input.value = 0;
+        }
+    };
+
+    type.addEventListener('change', sync);
+    sync();
+})();
+</script>
+@endpush
 
 @endsection
 

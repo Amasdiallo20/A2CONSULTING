@@ -36,14 +36,18 @@ class Course extends Model
     protected static function booted(): void
     {
         static::saving(function (Course $course) {
-            $course->price = $course->price ?? 0;
-            $course->price_type = (float) $course->price > 0 ? 'paid' : 'free';
+            $course->price = integer_price($course->price ?? 0);
+            $course->price_type = $course->price_type === 'paid' ? 'paid' : 'free';
+
+            if ($course->price_type === 'free') {
+                $course->price = 0;
+            }
         });
     }
 
     public function isFree(): bool
     {
-        return (float) $this->price <= 0;
+        return $this->price_type === 'free' || integer_price($this->price) <= 0;
     }
 
     /**
