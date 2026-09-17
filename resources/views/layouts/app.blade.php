@@ -45,7 +45,7 @@
     
     <!--====== Responsive css ======-->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m3">
+    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m4">
   
     @stack('styles')
     <style>

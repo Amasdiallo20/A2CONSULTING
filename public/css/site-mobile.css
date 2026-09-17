@@ -14,14 +14,6 @@ svg {
     height: auto;
 }
 
-iframe {
-    width: 100%;
-}
-
-.container {
-    max-width: 100%;
-}
-
 table {
     max-width: 100%;
 }
@@ -29,6 +21,10 @@ table {
 @media (max-width: 991.98px) {
     body {
         overflow-x: hidden;
+    }
+
+    iframe {
+        width: 100%;
     }
 
     .header-logo-support {
