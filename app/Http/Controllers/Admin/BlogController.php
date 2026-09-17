@@ -46,8 +46,6 @@ class BlogController extends Controller
             'image' => $this->imageValidationRule(),
             'category_id' => 'nullable|exists:categories,id',
             'tags' => 'nullable|string',
-            'is_featured' => 'boolean',
-            'is_published' => 'boolean',
             'published_at' => 'nullable|date',
         ]);
 
@@ -98,8 +96,6 @@ class BlogController extends Controller
             'image' => $this->imageValidationRule(),
             'category_id' => 'nullable|exists:categories,id',
             'tags' => 'nullable|string',
-            'is_featured' => 'boolean',
-            'is_published' => 'boolean',
             'published_at' => 'nullable|date',
         ]);
 

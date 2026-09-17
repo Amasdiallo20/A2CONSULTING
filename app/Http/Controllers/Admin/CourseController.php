@@ -53,12 +53,10 @@ class CourseController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'lessons_count' => 'nullable|integer|min:0',
             'quizzes_count' => 'nullable|integer|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-        $validated['price'] = $validated['price'] ?? 0;
+        $validated['price'] = integer_price($validated['price'] ?? 0);
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'courses');
@@ -106,20 +104,22 @@ class CourseController extends Controller
             'category_id' => 'nullable|exists:categories,id',
             'lessons_count' => 'nullable|integer|min:0',
             'quizzes_count' => 'nullable|integer|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
-        $validated['price'] = $validated['price'] ?? 0;
+        $validated['slug'] = $course->title === $validated['title']
+            ? $course->slug
+            : Str::slug($validated['title']);
+        $validated['price'] = integer_price($validated['price'] ?? 0);
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'courses', $course->image, true);
 
-        $course->update($validated);
+        $course->fill($validated);
+        $course->save();
+        $course->refresh();
 
-        return redirect()->route('admin.courses.index')
-            ->with('success', 'Cours mis à jour avec succès.');
+        return redirect()->route('admin.courses.edit', $course)
+            ->with('success', 'Formation enregistrée. Le nouveau tarif est visible sur le site.');
     }
 
     /**

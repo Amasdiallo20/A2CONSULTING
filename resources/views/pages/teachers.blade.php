@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row">
                 @forelse($teachers as $teacher)
-                <div class="col-lg-3 col-sm-6">
+                <div class="col-12 col-sm-6 col-lg-3">
                     <div class="singel-teachers mt-30 text-center">
                         <div class="image">
                             <img src="{{ asset($teacher->image ?: 'images/teachers/t-1.jpg') }}" alt="{{ $teacher->name }}">

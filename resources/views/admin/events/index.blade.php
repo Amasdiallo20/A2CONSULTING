@@ -33,16 +33,16 @@
                         <td>{{ $event->title }}</td>
                         <td>{{ $event->event_date->format('d/m/Y') }}</td>
                         <td>
-                            @if($event->start_time)
-                                {{ \Carbon\Carbon::parse($event->start_time)->format('H:i') }}
-                                @if($event->end_time)
-                                    - {{ \Carbon\Carbon::parse($event->end_time)->format('H:i') }}
+                            @if($event->formattedStartTime())
+                                {{ $event->formattedStartTime() }}
+                                @if($event->formattedEndTime())
+                                    - {{ $event->formattedEndTime() }}
                                 @endif
                             @else
                                 -
                             @endif
                         </td>
-                        <td>{{ $event->venue ?? $event->location ?? '-' }}</td>
+                        <td>{{ $event->placeLabel() ?? '-' }}</td
                         <td>
                             {{ $event->registered_count }}
                             @if($event->capacity)

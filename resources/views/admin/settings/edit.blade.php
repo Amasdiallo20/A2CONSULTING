@@ -12,6 +12,7 @@
         <form action="{{ route('admin.settings.update') }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            @include('admin.partials.form-errors')
             <h5 class="mb-3">Coordonnées</h5>
             <div class="row">
                 <div class="col-md-6 mb-3">

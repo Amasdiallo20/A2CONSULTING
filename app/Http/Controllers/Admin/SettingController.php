@@ -54,9 +54,12 @@ class SettingController extends Controller
             $validated[$field] = $this->storeImage($request, $field, 'settings', $setting->{$field}, true);
         }
 
-        $setting->update($validated);
+        $setting->fill($validated);
+        $setting->save();
+        $setting->refresh();
 
-        return back()->with('success', 'Paramètres du site enregistrés.');
+        return redirect()->route('admin.settings.edit')
+            ->with('success', 'Paramètres enregistrés. Les changements sont visibles sur le site.');
     }
 
     /**

@@ -18,7 +18,7 @@
             @endif
             <div class="row">
                 @forelse($posts as $post)
-                <div class="col-lg-6">
+                <div class="col-12 col-lg-6">
                     <div class="singel-blog mt-30">
                         <div class="blog-thum">
                             <img src="{{ asset($post->image ?: 'images/blog/b-1.jpg') }}" alt="{{ $post->title }}">

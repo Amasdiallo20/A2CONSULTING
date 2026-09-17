@@ -49,8 +49,6 @@ class TeacherController extends Controller
             'instagram' => 'nullable|string|max:255',
             'courses_count' => 'nullable|integer|min:0',
             'students_count' => 'nullable|integer|min:0',
-            'is_featured' => 'nullable|boolean',
-            'is_active' => 'nullable|boolean',
         ]);
 
         // Valider les URLs seulement si elles ne sont pas vides
@@ -123,8 +121,6 @@ class TeacherController extends Controller
             'instagram' => 'nullable|string|max:255',
             'courses_count' => 'nullable|integer|min:0',
             'students_count' => 'nullable|integer|min:0',
-            'is_featured' => 'nullable|boolean',
-            'is_active' => 'nullable|boolean',
         ]);
 
         // Valider les URLs seulement si elles ne sont pas vides

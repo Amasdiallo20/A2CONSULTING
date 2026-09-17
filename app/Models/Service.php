@@ -21,7 +21,7 @@ class Service extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'integer',
         'order' => 'integer',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',

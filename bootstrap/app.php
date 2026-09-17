@@ -20,6 +20,10 @@ return Application::configure(basePath: dirname(__DIR__))
             'admin' => \App\Http\Middleware\EnsureUserIsAdmin::class,
         ]);
 
+        $middleware->web(append: [
+            \App\Http\Middleware\PreventHtmlCache::class,
+        ]);
+
         $middleware->redirectGuestsTo(fn () => route('admin.login'));
         $middleware->trustProxies(at: '*');
     })

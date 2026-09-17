@@ -37,11 +37,11 @@
                         <td>{{ $product->title }}</td>
                         <td>{{ $product->category->name ?? '—' }}</td>
                         <td>
-                            @if($product->sale_price)
-                                <span class="text-decoration-line-through text-muted">{{ number_format($product->price, 2) }} GNF</span>
-                                <span class="text-danger fw-bold">{{ number_format($product->sale_price, 2) }} GNF</span>
+                            @if($product->hasPromo())
+                                <span class="text-decoration-line-through text-muted">{{ format_price($product->price) }}</span>
+                                <span class="text-danger fw-bold">{{ format_price($product->sale_price) }}</span>
                             @else
-                                {{ number_format($product->price, 2) }} GNF
+                                {{ format_price($product->price) }}
                             @endif
                         </td>
                         <td>

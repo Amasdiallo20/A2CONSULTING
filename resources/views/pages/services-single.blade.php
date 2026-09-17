@@ -17,7 +17,7 @@
                 </div>
                 <div class="col-lg-4">
                     @if($service->price)
-                        <p><strong>Tarif :</strong> {{ number_format($service->price, 2) }} GNF</p>
+                        <p><strong>Tarif :</strong> {{ format_price($service->price) }}</p>
                     @endif
                     <a href="{{ route('contact') }}" class="main-btn">Nous contacter</a>
                 </div>

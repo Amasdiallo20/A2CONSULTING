@@ -73,7 +73,7 @@
                 <p><strong>Catégorie:</strong> {{ $course->category->name ?? 'Aucune' }}</p>
                 <p><strong>Prix:</strong> 
                     @if($course->price > 0)
-                        {{ number_format($course->price, 2) }} GNF
+                        {{ format_price($course->price) }}
                     @else
                         <span class="badge bg-success">Gratuit</span>
                     @endif

@@ -75,8 +75,8 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="price" class="form-label">Prix (GNF) *</label>
-                        <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" 
+                        <label for="price" class="form-label">Prix affiché sur le site (GNF) *</label>
+                        <input type="number" step="1" class="form-control @error('price') is-invalid @enderror" 
                                id="price" name="price" value="{{ old('price', 0) }}" min="0" required>
                         @error('price')
                             <div class="invalid-feedback">{{ $message }}</div>
@@ -84,8 +84,9 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="sale_price" class="form-label">Prix de vente (GNF)</label>
-                        <input type="number" step="0.01" class="form-control @error('sale_price') is-invalid @enderror" 
+                        <label for="sale_price" class="form-label">Prix promo (GNF)</label>
+                        <small class="form-text text-muted">Optionnel. S’il est inférieur au prix, c’est ce montant qui s’affiche.</small>
+                        <input type="number" step="1" class="form-control @error('sale_price') is-invalid @enderror" 
                                id="sale_price" name="sale_price" value="{{ old('sale_price') }}" min="0">
                         @error('sale_price')
                             <div class="invalid-feedback">{{ $message }}</div>

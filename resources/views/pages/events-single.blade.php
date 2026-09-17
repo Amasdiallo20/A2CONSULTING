@@ -25,10 +25,10 @@
                             <div class="events-coundown pt-45 pb-50">
                                 <ul>
                                     <li><i class="fa fa-calendar"></i> {{ $event->event_date->translatedFormat('d F Y') }}</li>
-                                    @if($event->start_time)<li><i class="fa fa-clock-o"></i> {{ \Carbon\Carbon::parse($event->start_time)->format('H:i') }}</li>@endif
+                                    @if($event->formattedTimeRange())<li><i class="fa fa-clock-o"></i> {{ $event->formattedTimeRange() }}</li>@endif
                                     @if($event->location)<li><i class="fa fa-map-marker"></i> {{ $event->location }}</li>@endif
                                     @if($event->venue)<li><i class="fa fa-building"></i> {{ $event->venue }}</li>@endif
-                                    @if($event->price !== null)<li><i class="fa fa-money"></i> {{ $event->price > 0 ? number_format($event->price, 2).' GNF' : 'Gratuit' }}</li>@endif
+                                    @if($event->price !== null)<li><i class="fa fa-money"></i> {{ $event->price > 0 ? format_price($event->price) : 'Gratuit' }}</li>@endif
                                 </ul>
                             </div>
                         </div>

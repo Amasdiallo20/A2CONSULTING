@@ -15,6 +15,7 @@
         <form action="{{ route('admin.courses.update', $course->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            @include('admin.partials.form-errors')
             
             <div class="row">
                 <div class="col-md-8">
@@ -93,8 +94,8 @@
                     
                     <div class="mb-3">
                         <label for="price" class="form-label">Prix (GNF)</label>
-                        <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" 
-                               id="price" name="price" value="{{ old('price', $course->price) }}" min="0">
+                        <input type="number" step="1" class="form-control @error('price') is-invalid @enderror" 
+                               id="price" name="price" value="{{ old('price', integer_price($course->price)) }}" min="0">
                         @error('price')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

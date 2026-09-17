@@ -44,7 +44,7 @@
                 <tr>
                     <td>{{ $order->reference }}</td>
                     <td>{{ $order->name }}<br><small>{{ $order->email }}</small></td>
-                    <td>{{ number_format($order->total, 2) }} GNF</td>
+                    <td>{{ format_price($order->total) }}</td>
                     <td>{{ $order->items_count }}</td>
                     <td>{{ $order->created_at->format('d/m/Y H:i') }}</td>
                     <td>

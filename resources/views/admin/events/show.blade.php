@@ -34,16 +34,11 @@
                 <h5>Informations</h5>
                 <hr>
                 <p><strong>Date:</strong> {{ $event->event_date->format('d/m/Y') }}</p>
-                @if($event->start_time)
-                <p><strong>Heure:</strong> 
-                    {{ \Carbon\Carbon::parse($event->start_time)->format('H:i') }}
-                    @if($event->end_time)
-                        - {{ \Carbon\Carbon::parse($event->end_time)->format('H:i') }}
-                    @endif
-                </p>
+                @if($event->formattedTimeRange())
+                <p><strong>Heure:</strong> {{ $event->formattedTimeRange() }}</p>
                 @endif
-                @if($event->location || $event->venue)
-                <p><strong>Lieu:</strong> {{ $event->venue ?? $event->location }}</p>
+                @if($event->placeLabel())
+                <p><strong>Lieu:</strong> {{ $event->placeLabel() }}</p>
                 @endif
                 @if($event->capacity)
                 <p><strong>Capacité:</strong> {{ $event->registered_count }} / {{ $event->capacity }}</p>
@@ -52,7 +47,7 @@
                 @endif
                 <p><strong>Prix:</strong> 
                     @if($event->price > 0)
-                        {{ number_format($event->price, 2) }} GNF
+                        {{ format_price($event->price) }}
                     @else
                         Gratuit
                     @endif

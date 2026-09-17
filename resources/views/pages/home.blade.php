@@ -58,7 +58,7 @@
                                 $iconClass = $category->icon ?: $categoryIcons[$index % count($categoryIcons)];
                                 $colorClass = $categoryColors[$index % count($categoryColors)];
                             @endphp
-                            <div class="col-md-4 col-sm-6">
+                            <div class="col-12 col-sm-6 col-md-4">
                                 <a class="home-category-card {{ $colorClass }}" href="{{ route('courses.index', ['category' => $category->slug]) }}">
                                     <span class="home-category-icon">
                                         @if($category->image)
@@ -110,11 +110,11 @@
                                 <div class="singel-event">
                                     <span><i class="fa fa-calendar"></i> {{ $event->event_date->translatedFormat('d F Y') }}</span>
                                     <a href="{{ route('events.show', $event->id) }}"><h4>{{ $event->title }}</h4></a>
-                                    @if($event->start_time)
-                                        <span><i class="fa fa-clock-o"></i> {{ \Illuminate\Support\Str::of($event->start_time)->substr(0, 5) }}@if($event->end_time) - {{ \Illuminate\Support\Str::of($event->end_time)->substr(0, 5) }}@endif</span>
+                                    @if($event->formattedTimeRange())
+                                        <span><i class="fa fa-clock-o"></i> {{ $event->formattedTimeRange() }}</span>
                                     @endif
-                                    @if($event->location)
-                                        <span><i class="fa fa-map-marker"></i> {{ $event->location }}</span>
+                                    @if($event->placeLabel())
+                                        <span><i class="fa fa-map-marker"></i> {{ $event->placeLabel() }}</span>
                                     @endif
                                 </div>
                             </li>
@@ -228,7 +228,7 @@
             </div>
             <div class="row justify-content-center">
                 @foreach($products as $product)
-                <div class="col-lg-3 col-md-6 col-sm-8">
+                <div class="col-lg-3 col-md-6 col-12">
                     <div class="singel-publication product-card mt-30">
                         <div class="image">
                             <img src="{{ asset($product->image ?: 'images/publication/p-1.jpg') }}" alt="{{ $product->title }}">

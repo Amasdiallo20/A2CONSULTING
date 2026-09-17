@@ -8,15 +8,18 @@
         <div class="container">
             <div class="row">
                 @forelse($events as $event)
-                <div class="col-lg-6">
+                <div class="col-12 col-lg-6">
                     <div class="singel-event-list mt-30">
                         <div class="event-thum">
                             <img src="{{ asset($event->image ?: 'images/event/e-1.jpg') }}" alt="{{ $event->title }}">
                         </div>
                         <div class="event-cont">
                             <span><i class="fa fa-calendar"></i> {{ $event->event_date->translatedFormat('d F Y') }}</span>
+                            @if($event->formattedTimeRange())
+                                <span><i class="fa fa-clock-o"></i> {{ $event->formattedTimeRange() }}</span>
+                            @endif
                             <a href="{{ route('events.show', $event->id) }}"><h4>{{ $event->title }}</h4></a>
-                            <span><i class="fa fa-map-marker"></i> {{ $event->location ?: $event->venue }}</span>
+                            <span><i class="fa fa-map-marker"></i> {{ $event->placeLabel() ?: 'Lieu à confirmer' }}</span>
                             <p>{{ \Illuminate\Support\Str::limit($event->description, 140) }}</p>
                         </div>
                     </div>

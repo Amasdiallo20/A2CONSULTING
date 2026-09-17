@@ -32,7 +32,7 @@
                         <td>{{ $service->title }}</td>
                         <td>
                             @if($service->price > 0)
-                                {{ number_format($service->price, 2) }} GNF
+                                {{ format_price($service->price) }}
                             @else
                                 <span class="badge bg-info">Sur devis</span>
                             @endif

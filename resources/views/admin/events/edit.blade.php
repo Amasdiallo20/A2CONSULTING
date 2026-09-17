@@ -15,6 +15,7 @@
         <form action="{{ route('admin.events.update', $event->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            @include('admin.partials.form-errors')
             
             <div class="row">
                 <div class="col-md-8">
@@ -59,7 +60,7 @@
                     <div class="mb-3">
                         <label for="start_time" class="form-label">Heure de début</label>
                         <input type="time" class="form-control @error('start_time') is-invalid @enderror" 
-                               id="start_time" name="start_time" value="{{ old('start_time', $event->start_time ? \Carbon\Carbon::parse($event->start_time)->format('H:i') : '') }}">
+                               id="start_time" name="start_time" step="60" value="{{ old('start_time', $event->formattedStartTime()) }}">
                         @error('start_time')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -68,7 +69,7 @@
                     <div class="mb-3">
                         <label for="end_time" class="form-label">Heure de fin</label>
                         <input type="time" class="form-control @error('end_time') is-invalid @enderror" 
-                               id="end_time" name="end_time" value="{{ old('end_time', $event->end_time ? \Carbon\Carbon::parse($event->end_time)->format('H:i') : '') }}">
+                               id="end_time" name="end_time" step="60" value="{{ old('end_time', $event->formattedEndTime()) }}">
                         @error('end_time')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -103,8 +104,8 @@
                     
                     <div class="mb-3">
                         <label for="price" class="form-label">Prix (GNF)</label>
-                        <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" 
-                               id="price" name="price" value="{{ old('price', $event->price) }}" min="0">
+                        <input type="number" step="1" class="form-control @error('price') is-invalid @enderror" 
+                               id="price" name="price" value="{{ old('price', integer_price($event->price)) }}" min="0">
                         @error('price')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
@@ -114,7 +115,7 @@
                     
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" {{ old('is_featured', $event->is_featured) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" id="is_featured" name="is_featured" value="1" {{ old('is_featured', $event->is_featured) ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_featured">
                                 Mise en avant
                             </label>
@@ -123,7 +124,7 @@
                     
                     <div class="mb-3">
                         <div class="form-check">
-                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" {{ old('is_active', $event->is_active) ? 'checked' : '' }}>
+                            <input class="form-check-input" type="checkbox" id="is_active" name="is_active" value="1" {{ old('is_active', $event->is_active) ? 'checked' : '' }}>
                             <label class="form-check-label" for="is_active">
                                 Actif
                             </label>

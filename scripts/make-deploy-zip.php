@@ -1,7 +1,7 @@
 <?php
 
 $root = realpath(dirname(__DIR__));
-$zipPath = sys_get_temp_dir() . DIRECTORY_SEPARATOR . 'a2consulting_deploy.zip';
+$zipPath = dirname(__DIR__) . DIRECTORY_SEPARATOR . 'a2-full-deploy.zip';
 
 if (is_file($zipPath)) {
     unlink($zipPath);
@@ -14,6 +14,8 @@ $skipNames = [
     'a2consulting_deploy.zip' => true,
     'hostinger-install.php' => true,
     'scripts' => true,
+    'a2-full-deploy.zip' => true,
+    'storage' => true,
 ];
 
 $zip = new ZipArchive();

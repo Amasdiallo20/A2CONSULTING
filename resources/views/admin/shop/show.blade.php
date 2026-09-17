@@ -39,11 +39,11 @@
                 <h5>Informations</h5>
                 <hr>
                 <p><strong>Prix:</strong> 
-                    @if($shop->sale_price)
-                        <span class="text-decoration-line-through text-muted">{{ number_format($shop->price, 2) }} GNF</span>
-                        <span class="text-danger fw-bold">{{ number_format($shop->sale_price, 2) }} GNF</span>
+                    @if($shop->hasPromo())
+                        <span class="text-decoration-line-through text-muted">{{ format_price($shop->price) }}</span>
+                        <span class="text-danger fw-bold">{{ format_price($shop->sale_price) }}</span>
                     @else
-                        {{ number_format($shop->price, 2) }} GNF
+                        {{ format_price($shop->price) }}
                     @endif
                 </p>
                 <p><strong>Stock:</strong> 

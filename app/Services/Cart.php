@@ -12,7 +12,35 @@ class Cart
 
     public static function items(): array
     {
-        return Session::get(self::SESSION_KEY, []);
+        $items = Session::get(self::SESSION_KEY, []);
+        $changed = false;
+
+        foreach ($items as $key => $item) {
+            try {
+                $resolved = self::resolve($item['type'] ?? '', (int) ($item['id'] ?? 0));
+            } catch (\Throwable) {
+                continue;
+            }
+
+            foreach (['title', 'image', 'unit_price', 'stock'] as $field) {
+                $current = $items[$key][$field] ?? null;
+                $fresh = $resolved[$field];
+                $different = $field === 'unit_price'
+                    ? abs((float) $current - (float) $fresh) > 0.0001
+                    : (string) $current !== (string) $fresh;
+
+                if ($different) {
+                    $items[$key][$field] = $fresh;
+                    $changed = true;
+                }
+            }
+        }
+
+        if ($changed) {
+            Session::put(self::SESSION_KEY, $items);
+        }
+
+        return $items;
     }
 
     public static function count(): int
@@ -22,7 +50,7 @@ class Cart
 
     public static function total(): float
     {
-        return (float) collect(self::items())->sum(fn ($item) => $item['unit_price'] * $item['quantity']);
+        return (int) collect(self::items())->sum(fn ($item) => $item['unit_price'] * $item['quantity']);
     }
 
     public static function add(string $type, int $id, int $quantity = 1): string
@@ -92,7 +120,7 @@ class Cart
                 'id' => $course->id,
                 'title' => $course->title,
                 'image' => $course->image,
-                'unit_price' => (float) (($course->price_type === 'free') ? 0 : $course->price),
+                'unit_price' => integer_price($course->price),
                 'stock' => null,
             ];
         }
@@ -108,7 +136,7 @@ class Cart
             'id' => $product->id,
             'title' => $product->title,
             'image' => $product->image,
-            'unit_price' => (float) ($product->sale_price ?: $product->price),
+            'unit_price' => $product->sellingPrice(),
             'stock' => $product->stock_quantity,
         ];
     }

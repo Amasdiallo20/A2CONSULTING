@@ -44,12 +44,10 @@ class ServiceController extends Controller
             'price' => 'nullable|numeric|min:0',
             'price_type' => 'required|in:fixed,per_person,per_session,custom',
             'order' => 'nullable|integer|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-        $validated['price'] = $validated['price'] ?? 0;
+        $validated['price'] = integer_price($validated['price'] ?? 0);
         $validated['order'] = $validated['order'] ?? 0;
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
@@ -91,12 +89,10 @@ class ServiceController extends Controller
             'price' => 'nullable|numeric|min:0',
             'price_type' => 'required|in:fixed,per_person,per_session,custom',
             'order' => 'nullable|integer|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-        $validated['price'] = $validated['price'] ?? 0;
+        $validated['price'] = integer_price($validated['price'] ?? 0);
         $validated['order'] = $validated['order'] ?? 0;
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');

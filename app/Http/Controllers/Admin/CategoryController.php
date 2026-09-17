@@ -50,7 +50,6 @@ class CategoryController extends Controller
             'icon' => 'nullable|string|max:255',
             'type' => 'required|in:course,blog,shop,event',
             'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
@@ -92,7 +91,6 @@ class CategoryController extends Controller
             'icon' => 'nullable|string|max:255',
             'type' => 'required|in:course,blog,shop,event',
             'order' => 'nullable|integer|min:0',
-            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);

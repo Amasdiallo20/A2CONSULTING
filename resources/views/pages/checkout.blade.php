@@ -14,7 +14,7 @@
             @endif
             <div class="row">
                 <div class="col-lg-7">
-                    <div style="background:#fff;padding:30px;border-radius:8px;">
+                    <div style="background:#fff;padding:30px;border-radius:8px;" class="checkout-box">
                         <h4>Vos coordonnées</h4>
                         <form action="{{ route('checkout.store') }}" method="POST" class="mt-20">
                             @csrf
@@ -38,7 +38,7 @@
                             <p class="mb-0"><small>Choisissez l’opérateur et le numéro qui enverra l’argent.</small></p>
                             <div class="row mt-20">
                                 @foreach(['orange' => 'Orange Money', 'mtn' => 'MTN Mobile Money', 'moov' => 'Moov Money'] as $value => $label)
-                                <div class="col-md-4 mb-2">
+                                <div class="col-12 col-md-4 mb-2">
                                     <label style="display:block;border:1px solid #ddd;border-radius:8px;padding:12px;cursor:pointer;">
                                         <input type="radio" name="payment_operator" value="{{ $value }}" {{ old('payment_operator', 'orange') === $value ? 'checked' : '' }} required>
                                         <strong>{{ $label }}</strong>
@@ -57,19 +57,19 @@
                     </div>
                 </div>
                 <div class="col-lg-5">
-                    <div style="background:#fff;padding:30px;border-radius:8px;">
+                    <div style="background:#fff;padding:30px;border-radius:8px;" class="checkout-box">
                         <h4>Récapitulatif</h4>
-                        <ul class="mt-20">
+                        <ul class="mt-20 checkout-recap">
                             @foreach($items as $item)
                                 <li class="mb-2">
                                     {{ $item['title'] }}
                                     <small>({{ $item['type'] === 'course' ? 'Formation' : 'Produit' }} × {{ $item['quantity'] }})</small>
-                                    <strong class="float-right">{{ number_format($item['unit_price'] * $item['quantity'], 2) }} GNF</strong>
+                                    <strong>{{ format_price($item['unit_price'] * $item['quantity']) }}</strong>
                                 </li>
                             @endforeach
                         </ul>
                         <hr>
-                        <h5>Total : {{ number_format($total, 2) }} GNF</h5>
+                        <h5>Total : {{ format_price($total) }}</h5>
                         <p class="mt-20"><small>Après validation, vous recevrez les instructions pour payer via Orange Money, MTN ou Moov.</small></p>
                     </div>
                 </div>

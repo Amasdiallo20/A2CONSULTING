@@ -28,7 +28,7 @@ Route::prefix('admin')->name('admin.')->group(function () {
 });
 
 // Routes admin protégées
-Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin'])->group(function () {
+Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', \App\Http\Middleware\PurgePublicCache::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
     
     // Routes pour les formateurs

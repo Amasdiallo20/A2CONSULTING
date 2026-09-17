@@ -29,7 +29,7 @@
             </div>
             <div class="row">
                 @forelse($courses as $course)
-                <div class="col-lg-4 col-md-6">
+                <div class="col-lg-4 col-md-6 col-12">
                     <div class="mt-30">
                         @include('partials.course-card', ['course' => $course])
                     </div>

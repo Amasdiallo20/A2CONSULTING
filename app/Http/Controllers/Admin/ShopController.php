@@ -54,14 +54,13 @@ class ShopController extends Controller
                 'nullable',
                 Rule::exists('categories', 'id')->where(fn ($query) => $query->where('type', 'shop')),
             ],
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'shop');
+        $validated = $this->normalizeShopPrices($validated);
 
         ShopProduct::create($validated);
 
@@ -106,24 +105,52 @@ class ShopController extends Controller
                 'nullable',
                 Rule::exists('categories', 'id')->where(fn ($query) => $query->where('type', 'shop')),
             ],
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
+        $validated['slug'] = $shop->title === $validated['title']
+            ? $shop->slug
+            : Str::slug($validated['title']);
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'shop', $shop->image, true);
+        $validated = $this->normalizeShopPrices($validated, $shop);
 
-        $shop->update($validated);
+        $shop->fill($validated);
+        $shop->save();
+        $shop->refresh();
 
-        return redirect()->route('admin.shop.index')
-            ->with('success', 'Produit mis à jour avec succès.');
+        return redirect()->route('admin.shop.edit', $shop)
+            ->with('success', 'Produit enregistré. Le nouveau prix est visible sur le site.');
     }
 
     /**
      * Remove the specified resource from storage.
      */
+    /**
+     * Le champ "Prix" est celui affiché sur le site.
+     * Un prix promo n'est conservé que s'il est inférieur et explicitement modifié.
+     */
+    private function normalizeShopPrices(array $validated, ?ShopProduct $existing = null): array
+    {
+        $validated['price'] = integer_price($validated['price'] ?? 0);
+        $sale = $validated['sale_price'] ?? null;
+        if ($sale === '' || $sale === null || integer_price($sale) <= 0 || integer_price($sale) >= $validated['price']) {
+            $validated['sale_price'] = null;
+        } else {
+            $validated['sale_price'] = integer_price($sale);
+        }
+
+        if ($existing && $validated['price'] !== integer_price($existing->price)) {
+            $incomingSale = integer_price($validated['sale_price'] ?? 0);
+            $previousSale = integer_price($existing->sale_price ?? 0);
+            if ($incomingSale === $previousSale) {
+                $validated['sale_price'] = null;
+            }
+        }
+
+        return $validated;
+    }
+
     public function destroy(ShopProduct $shop)
     {
         $shop->delete();

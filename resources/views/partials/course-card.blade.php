@@ -5,10 +5,10 @@
         </div>
         <div class="price">
             <span>
-                @if($course->price_type === 'free' || $course->price == 0)
+                @if($course->isFree())
                     Gratuit
                 @else
-                    {{ number_format($course->price, 2, '.', ' ') }}&nbsp;GNF
+                    {{ format_price($course->price) }}
                 @endif
             </span>
         </div>

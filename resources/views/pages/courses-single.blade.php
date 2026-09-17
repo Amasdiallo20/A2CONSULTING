@@ -64,7 +64,7 @@
                                 <li><i class="fa fa-users"></i> Étudiants : {{ $course->students_count }}</li>
                                 <li>
                                     <i class="fa fa-money"></i>
-                                    @if($course->price_type === 'free' || $course->price == 0) Gratuit @else {{ number_format($course->price, 2) }} GNF @endif
+                                    @if($course->isFree()) Gratuit @else {{ format_price($course->price) }} @endif
                                 </li>
                             </ul>
                             @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif

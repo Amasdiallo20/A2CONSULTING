@@ -21,7 +21,7 @@
                 <div class="col-lg-8">
                     <div style="background:#fff;padding:30px;border-radius:8px;">
                         <h3>Commande {{ $order->reference }}</h3>
-                        <p>Montant à payer : <strong>{{ number_format($order->total, 2) }} GNF</strong></p>
+                        <p>Montant à payer : <strong>{{ format_price($order->total) }}</strong></p>
                         <p>Opérateur : <strong>{{ $order->operatorLabel() }}</strong></p>
                         <p>Votre numéro : <strong>{{ $order->momo_phone }}</strong></p>
 
@@ -32,7 +32,7 @@
                         @else
                             <div class="alert alert-warning">
                                 <strong>Étape 1 — Envoyez le paiement</strong><br>
-                                Transférez <strong>{{ number_format($order->total, 2) }} GNF</strong> via {{ $order->operatorLabel() }} vers le numéro :
+                                Transférez <strong>{{ format_price($order->total) }}</strong> via {{ $order->operatorLabel() }} vers le numéro :
                                 <br><span style="font-size:22px;font-weight:700;">{{ $merchant }}</span>
                                 <br><small>Indiquez la référence <strong>{{ $order->reference }}</strong> dans le motif du transfert.</small>
                             </div>
@@ -51,7 +51,7 @@
 
                         <div class="mt-30">
                             @foreach($order->items as $item)
-                                <p>{{ $item->title }} × {{ $item->quantity }} — {{ number_format($item->line_total, 2) }} GNF</p>
+                                <p>{{ $item->title }} × {{ $item->quantity }} — {{ format_price($item->line_total) }}</p>
                             @endforeach
                         </div>
                     </div>

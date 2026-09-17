@@ -23,8 +23,8 @@ class ShopProduct extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
-        'sale_price' => 'decimal:2',
+        'price' => 'integer',
+        'sale_price' => 'integer',
         'stock_quantity' => 'integer',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
@@ -46,5 +46,21 @@ class ShopProduct extends Model
     public function scopeFeatured($query)
     {
         return $query->where('is_featured', true);
+    }
+
+    public function hasPromo(): bool
+    {
+        if ($this->sale_price === null || $this->sale_price === '') {
+            return false;
+        }
+
+        $sale = (int) ($this->sale_price ?? 0);
+
+        return $sale > 0 && $sale < (int) $this->price;
+    }
+
+    public function sellingPrice(): int
+    {
+        return $this->hasPromo() ? (int) $this->sale_price : (int) $this->price;
     }
 }

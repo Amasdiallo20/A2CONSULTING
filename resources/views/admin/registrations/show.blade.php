@@ -61,7 +61,7 @@
                     <p><strong>Enseignant:</strong> {{ $registration->course->teacher->name }}</p>
                     @endif
                     @if($registration->course->price > 0)
-                    <p><strong>Prix:</strong> {{ number_format($registration->course->price, 2) }} GNF</p>
+                    <p><strong>Prix:</strong> {{ format_price($registration->course->price) }}</p>
                     @else
                     <p><strong>Prix:</strong> <span class="badge bg-success">Gratuit</span></p>
                     @endif

@@ -8,7 +8,7 @@
         <div class="container">
             <div class="row">
                 @forelse($services as $service)
-                <div class="col-lg-4 col-md-6">
+                <div class="col-12 col-md-6 col-lg-4">
                     <div class="singel-course mt-30">
                         <div class="thum">
                             <div class="image">

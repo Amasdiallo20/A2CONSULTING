@@ -15,6 +15,7 @@
         <form action="{{ route('admin.shop.update', $shop->id) }}" method="POST" enctype="multipart/form-data">
             @csrf
             @method('PUT')
+            @include('admin.partials.form-errors')
             
             <div class="row">
                 <div class="col-md-8">
@@ -76,18 +77,19 @@
                     </div>
                     
                     <div class="mb-3">
-                        <label for="price" class="form-label">Prix (GNF) *</label>
-                        <input type="number" step="0.01" class="form-control @error('price') is-invalid @enderror" 
-                               id="price" name="price" value="{{ old('price', $shop->price) }}" min="0" required>
+                        <label for="price" class="form-label">Prix affiché sur le site (GNF) *</label>
+                        <input type="number" step="1" class="form-control @error('price') is-invalid @enderror" 
+                               id="price" name="price" value="{{ old('price', integer_price($shop->price)) }}" min="0" required>
                         @error('price')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror
                     </div>
                     
                     <div class="mb-3">
-                        <label for="sale_price" class="form-label">Prix de vente (GNF)</label>
-                        <input type="number" step="0.01" class="form-control @error('sale_price') is-invalid @enderror" 
-                               id="sale_price" name="sale_price" value="{{ old('sale_price', $shop->sale_price) }}" min="0">
+                        <label for="sale_price" class="form-label">Prix promo (GNF)</label>
+                        <small class="form-text text-muted">Optionnel. S’il est inférieur au prix, c’est ce montant qui s’affiche.</small>
+                        <input type="number" step="1" class="form-control @error('sale_price') is-invalid @enderror" 
+                               id="sale_price" name="sale_price" value="{{ old('sale_price', $shop->sale_price !== null ? integer_price($shop->sale_price) : '') }}" min="0">
                         @error('sale_price')
                             <div class="invalid-feedback">{{ $message }}</div>
                         @enderror

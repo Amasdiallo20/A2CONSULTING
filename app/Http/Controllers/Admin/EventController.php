@@ -41,22 +41,21 @@ class EventController extends Controller
             'content' => 'nullable|string',
             'image' => $this->imageValidationRule(),
             'event_date' => 'required|date',
-            'start_time' => 'nullable|date_format:H:i',
-            'end_time' => 'nullable|date_format:H:i|after:start_time',
+            'start_time' => 'nullable|string|max:32',
+            'end_time' => 'nullable|string|max:32',
             'location' => 'nullable|string|max:255',
             'venue' => 'nullable|string|max:255',
             'capacity' => 'nullable|integer|min:1',
             'price' => 'nullable|numeric|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']);
-        $validated['price'] = $validated['price'] ?? 0;
+        $validated['price'] = integer_price($validated['price'] ?? 0);
         $validated['registered_count'] = 0;
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'events');
+        $validated = $this->normalizeEventTimes($validated);
 
         Event::create($validated);
 
@@ -91,26 +90,48 @@ class EventController extends Controller
             'content' => 'nullable|string',
             'image' => $this->imageValidationRule(),
             'event_date' => 'required|date',
-            'start_time' => 'nullable|date_format:H:i',
-            'end_time' => 'nullable|date_format:H:i|after:start_time',
+            'start_time' => 'nullable|string|max:32',
+            'end_time' => 'nullable|string|max:32',
             'location' => 'nullable|string|max:255',
             'venue' => 'nullable|string|max:255',
             'capacity' => 'nullable|integer|min:1',
             'price' => 'nullable|numeric|min:0',
-            'is_featured' => 'boolean',
-            'is_active' => 'boolean',
         ]);
 
-        $validated['slug'] = Str::slug($validated['title']);
-        $validated['price'] = $validated['price'] ?? 0;
+        $validated['slug'] = $event->title === $validated['title']
+            ? $event->slug
+            : Str::slug($validated['title']);
+        $validated['price'] = integer_price($validated['price'] ?? 0);
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'events', $event->image, true);
+        $validated = $this->normalizeEventTimes($validated);
 
-        $event->update($validated);
+        $event->fill($validated);
+        $event->save();
+        $event->refresh();
 
-        return redirect()->route('admin.events.index')
-            ->with('success', 'Événement mis à jour avec succès.');
+        return redirect()->route('admin.events.edit', $event)
+            ->with('success', 'Événement enregistré. Les changements sont visibles sur le site.');
+    }
+
+    private function normalizeEventTimes(array $validated): array
+    {
+        foreach (['start_time', 'end_time'] as $field) {
+            $value = $validated[$field] ?? null;
+            if ($value === null || $value === '') {
+                $validated[$field] = null;
+                continue;
+            }
+
+            try {
+                $validated[$field] = \Carbon\Carbon::parse($value)->format('H:i:s');
+            } catch (\Throwable) {
+                $validated[$field] = null;
+            }
+        }
+
+        return $validated;
     }
 
     /**

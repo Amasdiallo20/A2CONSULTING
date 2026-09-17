@@ -39,7 +39,7 @@
 
             <div class="row justify-content-center">
                 @forelse($products as $product)
-                    <div class="col-lg-3 col-md-6 col-sm-8">
+                    <div class="col-lg-3 col-md-6 col-12">
                         <div class="singel-publication product-card mt-30">
                             <div class="image">
                                 <img src="{{ asset($product->image ?: 'images/publication/p-1.jpg') }}" alt="{{ $product->title }}">

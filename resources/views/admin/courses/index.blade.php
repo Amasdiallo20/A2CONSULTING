@@ -35,7 +35,7 @@
                         <td>{{ $course->category->name ?? 'N/A' }}</td>
                         <td>
                             @if($course->price > 0)
-                                {{ number_format($course->price, 2) }} GNF
+                                {{ format_price($course->price) }}
                             @else
                                 <span class="badge bg-success">Gratuit</span>
                             @endif

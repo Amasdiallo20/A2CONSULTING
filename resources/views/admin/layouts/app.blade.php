@@ -296,6 +296,10 @@
                 promotion: false,
                 relative_urls: false,
                 convert_urls: true,
+                setup: (editor) => {
+                    const persist = () => editor.save();
+                    editor.on('change keyup undo redo blur', persist);
+                },
                 images_upload_handler: (blobInfo) => new Promise((resolve, reject) => {
                     const formData = new FormData();
                     formData.append('file', blobInfo.blob(), blobInfo.filename());
@@ -319,7 +323,11 @@
                 }),
             });
             document.querySelectorAll('form').forEach((form) => {
-                form.addEventListener('submit', () => tinymce.triggerSave());
+                form.addEventListener('submit', () => {
+                    if (window.tinymce) {
+                        tinymce.triggerSave();
+                    }
+                }, true);
             });
         }
     </script>

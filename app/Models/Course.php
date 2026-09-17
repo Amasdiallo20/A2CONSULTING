@@ -25,13 +25,26 @@ class Course extends Model
     ];
 
     protected $casts = [
-        'price' => 'decimal:2',
+        'price' => 'integer',
         'lessons_count' => 'integer',
         'quizzes_count' => 'integer',
         'students_count' => 'integer',
         'is_featured' => 'boolean',
         'is_active' => 'boolean',
     ];
+
+    protected static function booted(): void
+    {
+        static::saving(function (Course $course) {
+            $course->price = $course->price ?? 0;
+            $course->price_type = (float) $course->price > 0 ? 'paid' : 'free';
+        });
+    }
+
+    public function isFree(): bool
+    {
+        return (float) $this->price <= 0;
+    }
 
     /**
      * Scope a query to only include active courses.

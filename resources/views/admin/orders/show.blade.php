@@ -71,12 +71,12 @@
                             <td>{{ $item->title }}</td>
                             <td>{{ $item->item_type === 'course' ? 'Formation' : 'Produit' }}</td>
                             <td>{{ $item->quantity }}</td>
-                            <td>{{ number_format($item->line_total, 2) }} GNF</td>
+                            <td>{{ format_price($item->line_total) }}</td>
                         </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <h4 class="text-end">Total : {{ number_format($order->total, 2) }} GNF</h4>
+                <h4 class="text-end">Total : {{ format_price($order->total) }}</h4>
             </div>
         </div>
     </div>

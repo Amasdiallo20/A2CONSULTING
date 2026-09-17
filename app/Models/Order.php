@@ -23,7 +23,7 @@ class Order extends Model
     ];
 
     protected $casts = [
-        'total' => 'decimal:2',
+        'total' => 'integer',
     ];
 
     public function items()
