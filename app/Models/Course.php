@@ -17,6 +17,7 @@ class Course extends Model
         'duration',
         'teacher_id',
         'category_id',
+        'delivery_mode',
         'lessons_count',
         'quizzes_count',
         'students_count',
@@ -88,5 +89,32 @@ class Course extends Model
     public function registrations()
     {
         return $this->hasMany(CourseRegistration::class);
+    }
+
+    public const DELIVERY_MODES = [
+        'presentiel' => 'Présentiel',
+        'en_ligne' => 'En ligne',
+        'hybride' => 'Présentiel & en ligne',
+    ];
+
+    public function deliveryMode(): string
+    {
+        $mode = (string) ($this->delivery_mode ?? 'hybride');
+
+        return array_key_exists($mode, self::DELIVERY_MODES) ? $mode : 'hybride';
+    }
+
+    public function deliveryModeLabel(): string
+    {
+        return self::DELIVERY_MODES[$this->deliveryMode()];
+    }
+
+    public function deliveryModeIcon(): string
+    {
+        return match ($this->deliveryMode()) {
+            'presentiel' => 'fa-map-marker',
+            'en_ligne' => 'fa-laptop',
+            default => 'fa-globe',
+        };
     }
 }

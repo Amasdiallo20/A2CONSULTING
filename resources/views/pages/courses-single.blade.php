@@ -33,6 +33,12 @@
                                     </div>
                                 </li>
                                 @endif
+                                <li>
+                                    <div class="course-category">
+                                        <span>Format</span>
+                                        <h6><i class="fa {{ $course->deliveryModeIcon() }}"></i> {{ $course->deliveryModeLabel() }}</h6>
+                                    </div>
+                                </li>
                             </ul>
                         </div>
                         <div class="corses-singel-image pt-50">
@@ -60,6 +66,7 @@
                             <h4>Détails</h4>
                             <ul>
                                 @if($course->duration)<li><i class="fa fa-clock-o"></i> Durée : {{ $course->duration }}</li>@endif
+                                <li><i class="fa {{ $course->deliveryModeIcon() }}"></i> Format : {{ $course->deliveryModeLabel() }}</li>
                                 <li><i class="fa fa-book"></i> Leçons : {{ $course->lessons_count }}</li>
                                 <li><i class="fa fa-users"></i> Étudiants : {{ $course->students_count }}</li>
                                 <li>

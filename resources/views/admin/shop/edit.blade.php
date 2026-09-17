@@ -113,7 +113,8 @@
                         @enderror
                     </div>
                     
-                    @include('admin.partials.image-field', ['name' => 'image', 'current' => $shop->image, 'label' => 'Image'])
+                    @include('admin.partials.image-field', ['name' => 'image', 'current' => $shop->image, 'label' => 'Image principale (vue de face)'])
+                    @include('admin.partials.image-field', ['name' => 'image_secondary', 'current' => $shop->image_secondary, 'label' => '2e image (profil, dos ou détail)'])
                     
                     <div class="mb-3">
                         <div class="form-check">

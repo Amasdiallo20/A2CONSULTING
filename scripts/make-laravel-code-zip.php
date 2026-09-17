@@ -13,7 +13,7 @@ if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
     exit(1);
 }
 
-$dirs = ['app', 'bootstrap', 'config', 'database', 'resources/views', 'routes', 'css', 'public/css'];
+$dirs = ['app', 'bootstrap', 'config', 'database', 'resources/views', 'routes', 'css', 'js', 'public/css', 'public/js'];
 foreach ($dirs as $dir) {
     $fullDir = $root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $dir);
     if (! is_dir($fullDir)) {

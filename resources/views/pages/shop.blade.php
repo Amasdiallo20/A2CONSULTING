@@ -23,7 +23,7 @@
                         </div>
                         <div class="shop-select">
                             <form method="GET" action="{{ route('shop.index') }}">
-                                <select name="category" onchange="this.form.submit()">
+                                <select name="category" class="js-auto-submit" onchange="this.form.submit()">
                                     <option value="">Toutes les catégories</option>
                                     @foreach($categories as $category)
                                         <option value="{{ $category->slug }}" {{ request('category') == $category->slug ? 'selected' : '' }}>

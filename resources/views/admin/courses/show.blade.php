@@ -71,6 +71,7 @@
                 <hr>
                 <p><strong>Enseignant:</strong> {{ $course->teacher->name ?? 'Non assigné' }}</p>
                 <p><strong>Catégorie:</strong> {{ $course->category->name ?? 'Aucune' }}</p>
+                <p><strong>Format:</strong> {{ $course->deliveryModeLabel() }}</p>
                 <p><strong>Prix:</strong> 
                     @if($course->price > 0)
                         {{ format_price($course->price) }}

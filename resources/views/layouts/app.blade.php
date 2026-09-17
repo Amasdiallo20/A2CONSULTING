@@ -41,11 +41,11 @@
     <link rel="stylesheet" href="{{ asset('css/default.css') }}">
     
     <!--====== Style css ======-->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=brand">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=brand4">
     
     <!--====== Responsive css ======-->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m10">
+    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m14">
   
     @stack('styles')
     <style>
@@ -670,7 +670,7 @@
     <script src="{{ asset('js/ajax-contact.js') }}"></script>
     
     <!--====== Main js ======-->
-    <script src="{{ asset('js/main.js') }}"></script>
+    <script src="{{ asset('js/main.js') }}?v=m11"></script>
     
     @stack('scripts')
 </body>

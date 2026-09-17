@@ -45,6 +45,7 @@ class ShopController extends Controller
             'description' => 'nullable|string',
             'content' => 'nullable|string',
             'image' => $this->imageValidationRule(),
+            'image_secondary' => $this->imageValidationRule(),
             'author' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -60,6 +61,7 @@ class ShopController extends Controller
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'shop');
+        $validated['image_secondary'] = $this->storeImage($request, 'image_secondary', 'shop');
         $validated = $this->normalizeShopPrices($validated);
 
         ShopProduct::create($validated);
@@ -96,6 +98,7 @@ class ShopController extends Controller
             'description' => 'nullable|string',
             'content' => 'nullable|string',
             'image' => $this->imageValidationRule(),
+            'image_secondary' => $this->imageValidationRule(),
             'author' => 'nullable|string|max:255',
             'price' => 'required|numeric|min:0',
             'sale_price' => 'nullable|numeric|min:0',
@@ -113,6 +116,7 @@ class ShopController extends Controller
         $validated['is_featured'] = $request->has('is_featured');
         $validated['is_active'] = $request->has('is_active');
         $validated['image'] = $this->storeImage($request, 'image', 'shop', $shop->image, true);
+        $validated['image_secondary'] = $this->storeImage($request, 'image_secondary', 'shop', $shop->image_secondary, true);
         $validated = $this->normalizeShopPrices($validated, $shop);
 
         $shop->fill($validated);

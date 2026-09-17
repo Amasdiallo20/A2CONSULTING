@@ -111,7 +111,8 @@
                         @enderror
                     </div>
                     
-                    @include('admin.partials.image-field', ['name' => 'image', 'current' => null, 'label' => 'Image'])
+                    @include('admin.partials.image-field', ['name' => 'image', 'current' => null, 'label' => 'Image principale (vue de face)'])
+                    @include('admin.partials.image-field', ['name' => 'image_secondary', 'current' => null, 'label' => '2e image (profil, dos ou détail)'])
                     
                     <div class="mb-3">
                         <div class="form-check">

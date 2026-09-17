@@ -250,11 +250,31 @@ table {
     }
 
     .shop-top-search,
-    .courses-top-search {
+    .courses-top-search,
+    .courses-toolbar {
         display: flex;
         flex-direction: column;
         gap: 12px;
         align-items: stretch !important;
+        overflow: visible !important;
+        float: none !important;
+        width: 100%;
+    }
+
+    .courses-toolbar__meta {
+        padding-bottom: 0;
+    }
+
+    .courses-toolbar__filters,
+    .courses-toolbar__field,
+    .courses-filter-select {
+        width: 100%;
+        min-width: 0;
+        margin-left: 0;
+    }
+
+    .courses-filter-chips {
+        justify-content: flex-start;
     }
 
     .shop-top-search .shop-select,
@@ -908,3 +928,119 @@ table {
         max-width: 100%;
     }
 }
+
+.shop-destails {
+    padding: 28px 32px 40px;
+    border-radius: 18px;
+    box-shadow: 0 18px 50px rgba(16, 24, 40, 0.06);
+}
+
+.shop-destails .shop-left {
+    padding-right: 20px;
+}
+
+.product-gallery {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.product-gallery__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+.product-gallery__shot {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 18px;
+    background: linear-gradient(180deg, #f8fafc 0%, #eef2f6 100%);
+    border: 1px solid rgba(1, 104, 163, 0.1);
+    box-shadow: 0 10px 28px rgba(16, 24, 40, 0.08);
+    text-decoration: none;
+    color: inherit;
+    aspect-ratio: 1 / 1;
+}
+
+.product-gallery__shot:hover,
+.product-gallery__shot:focus {
+    text-decoration: none;
+    border-color: rgba(1, 104, 163, 0.35);
+    box-shadow: 0 16px 36px rgba(1, 104, 163, 0.14);
+}
+
+.product-gallery__frame {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.product-gallery__shot img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 22px;
+    transition: transform 0.4s ease;
+}
+
+.product-gallery__shot.is-detail img {
+    object-fit: cover;
+    object-position: center 28%;
+    padding: 0;
+    transform: scale(1.28);
+}
+
+.product-gallery__shot:hover img {
+    transform: scale(1.05);
+}
+
+.product-gallery__shot.is-detail:hover img {
+    transform: scale(1.38);
+}
+
+.product-gallery__caption {
+    position: absolute;
+    left: 12px;
+    bottom: 12px;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(1, 104, 163, 0.94);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    box-shadow: 0 6px 16px rgba(1, 104, 163, 0.25);
+}
+
+.product-gallery__hint {
+    margin: 0;
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.45;
+}
+
+@media (max-width: 767.98px) {
+    .shop-destails {
+        padding: 18px 16px 28px;
+    }
+
+    .shop-destails .shop-left {
+        padding-right: 0;
+    }
+
+    .product-gallery__grid {
+        gap: 10px;
+    }
+
+    .product-gallery__shot img {
+        padding: 12px;
+    }
+}
+

@@ -15,10 +15,20 @@ class CourseController extends Controller
         $courses = Course::with(['teacher', 'category'])
             ->active()
             ->when($request->filled('category'), function ($query) use ($request) {
-                $query->whereHas('category', fn ($q) => $q->where('slug', $request->category));
+                $category = $request->string('category')->toString();
+                $query->where(function ($inner) use ($category) {
+                    $inner->where('category_id', $category)
+                        ->orWhereHas('category', fn ($q) => $q->where('slug', $category)->where('type', 'course'));
+                });
             })
             ->when($request->filled('q'), function ($query) use ($request) {
                 $query->where('title', 'like', '%'.$request->q.'%');
+            })
+            ->when($request->filled('mode'), function ($query) use ($request) {
+                $mode = $request->string('mode')->toString();
+                if (array_key_exists($mode, Course::DELIVERY_MODES)) {
+                    $query->where('delivery_mode', $mode);
+                }
             })
             ->latest()
             ->paginate(12)

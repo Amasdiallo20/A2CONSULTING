@@ -2,6 +2,9 @@
     <div class="thum">
         <div class="image">
             <img src="{{ asset($course->image ?: 'images/course/cu-1.jpg') }}" alt="{{ $course->title }}">
+            <span class="course-mode-badge course-mode-badge--{{ $course->deliveryMode() }}">
+                <i class="fa {{ $course->deliveryModeIcon() }}"></i> {{ $course->deliveryModeLabel() }}
+            </span>
         </div>
         <div class="price">
             <span>

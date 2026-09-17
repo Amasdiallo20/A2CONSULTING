@@ -12,6 +12,7 @@ class ShopProduct extends Model
         'description',
         'content',
         'image',
+        'image_secondary',
         'author',
         'price',
         'sale_price',
@@ -62,5 +63,45 @@ class ShopProduct extends Model
     public function sellingPrice(): int
     {
         return $this->hasPromo() ? (int) $this->sale_price : (int) $this->price;
+    }
+
+    public function primaryImage(): string
+    {
+        return $this->image ?: 'images/shop-singel/ss-1.jpg';
+    }
+
+    /**
+     * Two product views for the public gallery (face + angle/detail).
+     *
+     * @return list<array{src: string, label: string, detail: bool}>
+     */
+    public function galleryImages(): array
+    {
+        $main = $this->primaryImage();
+        $second = $this->attributes['image_secondary'] ?? null;
+
+        $views = [
+            [
+                'src' => $main,
+                'label' => 'Vue d’ensemble',
+                'detail' => false,
+            ],
+        ];
+
+        if ($second && $second !== $main) {
+            $views[] = [
+                'src' => $second,
+                'label' => 'Autre angle',
+                'detail' => false,
+            ];
+        } else {
+            $views[] = [
+                'src' => $main,
+                'label' => 'Détail',
+                'detail' => true,
+            ];
+        }
+
+        return $views;
     }
 }

@@ -51,6 +51,7 @@ class CourseController extends Controller
             'duration' => 'nullable|string',
             'teacher_id' => 'nullable|exists:teachers,id',
             'category_id' => 'nullable|exists:categories,id',
+            'delivery_mode' => 'required|in:presentiel,en_ligne,hybride',
             'lessons_count' => 'nullable|integer|min:0',
             'quizzes_count' => 'nullable|integer|min:0',
         ]);
@@ -102,6 +103,7 @@ class CourseController extends Controller
             'duration' => 'nullable|string',
             'teacher_id' => 'nullable|exists:teachers,id',
             'category_id' => 'nullable|exists:categories,id',
+            'delivery_mode' => 'required|in:presentiel,en_ligne,hybride',
             'lessons_count' => 'nullable|integer|min:0',
             'quizzes_count' => 'nullable|integer|min:0',
         ]);

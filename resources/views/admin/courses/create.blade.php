@@ -79,6 +79,19 @@
                     </div>
                     
                     <div class="mb-3">
+                        <label for="delivery_mode" class="form-label">Format *</label>
+                        <select class="form-select @error('delivery_mode') is-invalid @enderror"
+                                id="delivery_mode" name="delivery_mode" required>
+                            @foreach(\App\Models\Course::DELIVERY_MODES as $value => $label)
+                                <option value="{{ $value }}" {{ old('delivery_mode', 'hybride') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @endforeach
+                        </select>
+                        @error('delivery_mode')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    
+                    <div class="mb-3">
                         <label for="price_type" class="form-label">Type de prix *</label>
                         <select class="form-select @error('price_type') is-invalid @enderror" 
                                 id="price_type" name="price_type" required>

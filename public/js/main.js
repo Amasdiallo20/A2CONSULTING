@@ -348,7 +348,13 @@ $(function() {
     
     //===== Nice Select
     
-    $('select').niceSelect();
+    $('select').not('.js-skip-nice-select').niceSelect();
+
+    $(document).on('change', 'select.js-auto-submit', function () {
+        if (this.form) {
+            this.form.submit();
+        }
+    });
     
     
     

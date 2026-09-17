@@ -20,6 +20,7 @@
                         <th>Titre</th>
                         <th>Enseignant</th>
                         <th>Catégorie</th>
+                        <th>Format</th>
                         <th>Prix</th>
                         <th>Étudiants</th>
                         <th>Statut</th>
@@ -33,6 +34,7 @@
                         <td>{{ $course->title }}</td>
                         <td>{{ $course->teacher->name ?? 'N/A' }}</td>
                         <td>{{ $course->category->name ?? 'N/A' }}</td>
+                        <td>{{ $course->deliveryModeLabel() }}</td>
                         <td>
                             @if($course->price > 0)
                                 {{ format_price($course->price) }}
@@ -66,7 +68,7 @@
                     </tr>
                     @empty
                     <tr>
-                        <td colspan="8" class="text-center">Aucun cours trouvé.</td>
+                        <td colspan="9" class="text-center">Aucun cours trouvé.</td>
                     </tr>
                     @endforelse
                 </tbody>

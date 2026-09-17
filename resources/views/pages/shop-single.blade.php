@@ -4,14 +4,28 @@
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => $product->title, 'bannerKey' => 'shop'])
 
+    @php $gallery = $product->galleryImages(); @endphp
+
     <section id="shop-singel" class="pt-120 pb-120 gray-bg">
         <div class="container">
             <div class="shop-destails">
-                <div class="row">
+                <div class="row align-items-start">
                     <div class="col-lg-6">
                         <div class="shop-left pt-30">
-                            <div class="shop-image">
-                                <img src="{{ asset($product->image ?: 'images/shop-singel/ss-1.jpg') }}" alt="{{ $product->title }}">
+                            <div class="product-gallery" data-product-gallery>
+                                <div class="product-gallery__grid">
+                                    @foreach($gallery as $index => $view)
+                                        <a href="{{ asset($view['src']) }}"
+                                           class="product-gallery__shot shop-items {{ $view['detail'] ? 'is-detail' : '' }} {{ $index === 0 ? 'is-active' : '' }}"
+                                           title="{{ $product->title }} — {{ $view['label'] }}">
+                                            <span class="product-gallery__frame">
+                                                <img src="{{ asset($view['src']) }}" alt="{{ $product->title }} — {{ $view['label'] }}">
+                                            </span>
+                                            <span class="product-gallery__caption">{{ $view['label'] }}</span>
+                                        </a>
+                                    @endforeach
+                                </div>
+                                <p class="product-gallery__hint">Cliquez sur une vue pour l’agrandir.</p>
                             </div>
                         </div>
                     </div>

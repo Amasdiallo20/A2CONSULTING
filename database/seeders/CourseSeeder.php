@@ -278,11 +278,13 @@ class CourseSeeder extends Seeder
             ],
         ];
 
-        foreach ($courses as $course) {
+        foreach ($courses as $index => $course) {
+            $modes = ['presentiel', 'en_ligne', 'hybride'];
             Course::firstOrCreate(
                 ['slug' => Str::slug($course['title'])],
                 array_merge($course, [
                     'slug' => Str::slug($course['title']),
+                    'delivery_mode' => $course['delivery_mode'] ?? $modes[$index % 3],
                     'students_count' => 0,
                     'is_active' => true,
                 ])
