@@ -35,7 +35,14 @@ class ContactController extends Controller
             'message.min' => 'Le message doit contenir au moins 5 caractères.',
         ]);
 
-        ContactMessage::create($validated);
+        ContactMessage::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'subject' => $validated['subject'] ?? null,
+            'phone' => $validated['phone'] ?? null,
+            'message' => $validated['message'],
+            'is_read' => false,
+        ]);
 
         $this->notifySite($validated);
 

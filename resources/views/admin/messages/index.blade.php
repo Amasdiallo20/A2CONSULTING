@@ -21,7 +21,7 @@
             </thead>
             <tbody>
                 @forelse($messages as $message)
-                <tr>
+                <tr class="{{ $message->is_read ? '' : 'table-warning fw-semibold' }}">
                     <td>{{ $message->created_at->format('d/m/Y H:i') }}</td>
                     <td>{{ $message->name }}</td>
                     <td>{{ $message->email }}</td>
@@ -30,7 +30,7 @@
                         @if($message->is_read)
                             <span class="badge bg-secondary">Lu</span>
                         @else
-                            <span class="badge bg-primary">Nouveau</span>
+                            <span class="badge bg-danger">Nouveau</span>
                         @endif
                     </td>
                     <td>

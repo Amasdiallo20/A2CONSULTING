@@ -244,6 +244,14 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.messages.*') ? 'active' : '' }}" href="{{ route('admin.messages.index') }}">
                                 <i class="fas fa-envelope me-2"></i> Messages
+                                @php
+                                    $unreadMessages = \Illuminate\Support\Facades\Schema::hasTable('contact_messages')
+                                        ? \App\Models\ContactMessage::query()->where('is_read', false)->count()
+                                        : 0;
+                                @endphp
+                                @if($unreadMessages > 0)
+                                    <span class="badge bg-danger ms-2">{{ $unreadMessages }}</span>
+                                @endif
                             </a>
                         </li>
                         <li class="nav-item">
@@ -264,6 +272,20 @@
             </nav>
             
             <main class="main-content">
+                @php
+                    $unreadContactMessages = \Illuminate\Support\Facades\Schema::hasTable('contact_messages')
+                        ? \App\Models\ContactMessage::query()->where('is_read', false)->count()
+                        : 0;
+                @endphp
+                @if($unreadContactMessages > 0 && ! request()->routeIs('admin.messages.*'))
+                    <div class="alert alert-warning d-flex justify-content-between align-items-center" role="status">
+                        <span>
+                            <i class="fas fa-envelope me-2"></i>
+                            {{ $unreadContactMessages }} nouveau{{ $unreadContactMessages > 1 ? 'x' : '' }} message{{ $unreadContactMessages > 1 ? 's' : '' }} de contact.
+                        </span>
+                        <a href="{{ route('admin.messages.index') }}" class="btn btn-sm btn-warning">Voir les messages</a>
+                    </div>
+                @endif
                 @if(session('success'))
                     <div class="alert alert-success alert-dismissible fade show" role="alert">
                         {{ session('success') }}

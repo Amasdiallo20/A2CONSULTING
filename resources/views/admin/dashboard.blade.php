@@ -74,6 +74,16 @@
             </div>
         </div>
     </div>
+    <div class="col-md-4">
+        <div class="card {{ $stats['unread_messages'] > 0 ? 'border-warning' : '' }}">
+            <div class="card-body">
+                <h6 class="text-muted mb-1">Messages de contact</h6>
+                <h3>{{ $stats['unread_messages'] }}</h3>
+                <small>{{ $stats['messages'] }} au total — {{ $stats['unread_messages'] }} non lu{{ $stats['unread_messages'] > 1 ? 's' : '' }}</small><br>
+                <a href="{{ route('admin.messages.index') }}">Voir les messages</a>
+            </div>
+        </div>
+    </div>
 </div>
 
 <div class="row mt-4">
@@ -140,6 +150,59 @@
                 </div>
                 @else
                 <p class="text-muted">Aucune inscription récente.</p>
+                @endif
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Messages de contact récents</h5>
+                <a href="{{ route('admin.messages.index') }}" class="btn btn-sm btn-outline-primary">Tous les messages</a>
+            </div>
+            <div class="card-body">
+                @if($recentMessages->count() > 0)
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Sujet</th>
+                                <th>Statut</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach($recentMessages as $message)
+                            <tr class="{{ $message->is_read ? '' : 'table-warning fw-semibold' }}">
+                                <td>{{ $message->created_at->format('d/m/Y H:i') }}</td>
+                                <td>{{ $message->name }}</td>
+                                <td>{{ $message->email }}</td>
+                                <td>{{ $message->subject ?: '—' }}</td>
+                                <td>
+                                    @if($message->is_read)
+                                        <span class="badge bg-secondary">Lu</span>
+                                    @else
+                                        <span class="badge bg-danger">Nouveau</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    <a href="{{ route('admin.messages.show', $message) }}" class="btn btn-sm btn-primary">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+                @else
+                <p class="text-muted">Aucun message pour le moment.</p>
                 @endif
             </div>
         </div>
