@@ -28,3 +28,21 @@ function course_listing_url(array $overrides = []): string
 
     return route('courses.index', array_filter($query, fn ($value) => $value !== null && $value !== ''));
 }
+
+function share_asset_url(?string $path = null): string
+{
+    $path = $path ?: 'images/logo.png';
+
+    if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+        return $path;
+    }
+
+    return asset(ltrim($path, '/'));
+}
+
+function share_plain_text(?string $value, int $limit = 180): string
+{
+    $text = trim(preg_replace('/\s+/', ' ', strip_tags((string) $value) ?: ''));
+
+    return $text === '' ? '' : \Illuminate\Support\Str::limit($text, $limit);
+}

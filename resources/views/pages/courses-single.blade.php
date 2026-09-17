@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('title', $course->title)
+@section('meta_description', share_plain_text($course->description ?: $course->title))
+@section('og_image', share_asset_url($course->image ?: 'images/course/cu-1.jpg'))
+@section('og_type', 'article')
+@section('canonical', route('courses.show', $course->id))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => $course->title, 'bannerKey' => 'courses'])
@@ -44,6 +48,11 @@
                         <div class="corses-singel-image pt-50">
                             <img src="{{ asset($course->image ?: 'images/course/cu-1.jpg') }}" alt="{{ $course->title }}">
                         </div>
+                        @include('partials.share-bar', [
+                            'url' => route('courses.show', $course->id),
+                            'title' => $course->title,
+                            'text' => share_plain_text($course->description ?: $course->title) ?: $course->title,
+                        ])
                         <div class="overview-description">
                             @if($course->description)
                             <div class="singel-description pt-40">

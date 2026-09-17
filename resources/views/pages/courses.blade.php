@@ -1,5 +1,8 @@
 @extends('layouts.app')
 @section('title', 'Formations')
+@section('meta_description', 'Découvrez les formations A2 Consulting : présentiel, en ligne ou les deux.')
+@section('og_image', share_asset_url($site?->pageBanner('courses') ?? 'images/page-banner-2.jpg'))
+@section('canonical', route('courses.index'))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => 'Formations', 'subtitle' => 'Parcours concrets pour progresser et réussir', 'bannerKey' => 'courses'])
@@ -36,6 +39,12 @@
                             </label>
                         </div>
                     </form>
+                    @include('partials.share-bar', [
+                        'url' => route('courses.index'),
+                        'title' => 'Formations A2 Consulting',
+                        'text' => 'Découvrez les formations A2 Consulting.',
+                        'compact' => true,
+                    ])
                 </div>
             </div>
             <div class="row">

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('title', $product->title)
+@section('meta_description', share_plain_text($product->description ?: $product->title))
+@section('og_image', share_asset_url($product->image ?: 'images/shop-singel/ss-1.jpg'))
+@section('og_type', 'product')
+@section('canonical', route('shop.show', $product->id))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => $product->title, 'bannerKey' => 'shop'])
@@ -34,6 +38,11 @@
                             <div class="shop-content">
                                 @if($product->category)<p class="product-card__cat">{{ $product->category->name }}</p>@endif
                                 <h3>{{ $product->title }}</h3>
+                                @include('partials.share-bar', [
+                                    'url' => route('shop.show', $product->id),
+                                    'title' => $product->title,
+                                    'text' => share_plain_text($product->description ?: $product->title) ?: $product->title,
+                                ])
                                 @include('partials.product-price', ['product' => $product, 'size' => 'product-price--lg'])
                                 @if($product->description)
                                     <p class="shop-content__desc">{!! nl2br(e($product->description)) !!}</p>

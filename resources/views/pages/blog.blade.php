@@ -1,11 +1,20 @@
 @extends('layouts.app')
 @section('title', 'Blog')
+@section('meta_description', 'Actualités, conseils et ressources d’A2 Consulting.')
+@section('og_image', share_asset_url($site?->pageBanner('blog') ?? 'images/page-banner-4.jpg'))
+@section('canonical', route('blog.index'))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => 'Blog', 'subtitle' => 'Actualités, conseils et ressources', 'bannerKey' => 'blog'])
 
     <section id="blog-page" class="pt-90 pb-120 gray-bg">
         <div class="container">
+            @include('partials.share-bar', [
+                'url' => route('blog.index'),
+                'title' => 'Blog A2 Consulting',
+                'text' => 'Actualités et conseils A2 Consulting.',
+                'compact' => true,
+            ])
             @if($categories->isNotEmpty())
             <form method="GET" class="mb-30">
                 <select name="category" onchange="this.form.submit()">

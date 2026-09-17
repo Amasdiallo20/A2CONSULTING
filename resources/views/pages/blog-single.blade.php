@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('title', $post->title)
+@section('meta_description', share_plain_text($post->excerpt ?: $post->title))
+@section('og_image', share_asset_url($post->image ?: 'images/blog/b-1.jpg'))
+@section('og_type', 'article')
+@section('canonical', route('blog.show', $post->id))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => $post->title, 'bannerKey' => 'blog'])
@@ -21,6 +25,11 @@
                             </ul>
                             @if($post->excerpt)<p><strong>{{ $post->excerpt }}</strong></p>@endif
                             <div>{!! $post->content !!}</div>
+                            @include('partials.share-bar', [
+                                'url' => route('blog.show', $post->id),
+                                'title' => $post->title,
+                                'text' => share_plain_text($post->excerpt ?: $post->title) ?: $post->title,
+                            ])
                         </div>
                     </div>
                 </div>

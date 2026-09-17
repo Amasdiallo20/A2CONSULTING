@@ -1,11 +1,20 @@
 @extends('layouts.app')
 @section('title', 'Événements')
+@section('meta_description', 'Rencontres, ateliers et sessions à venir chez A2 Consulting.')
+@section('og_image', share_asset_url($site?->pageBanner('events') ?? 'images/page-banner-3.jpg'))
+@section('canonical', route('events.index'))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => 'Événements', 'subtitle' => 'Rencontres, ateliers et sessions à venir', 'bannerKey' => 'events'])
 
     <section id="event-page" class="pt-90 pb-120 gray-bg">
         <div class="container">
+            @include('partials.share-bar', [
+                'url' => route('events.index'),
+                'title' => 'Événements A2 Consulting',
+                'text' => 'Découvrez les événements A2 Consulting.',
+                'compact' => true,
+            ])
             <div class="row">
                 @forelse($events as $event)
                 <div class="col-12 col-lg-6">

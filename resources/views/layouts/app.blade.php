@@ -7,8 +7,28 @@
     <meta http-equiv="Cache-Control" content="no-store, no-cache, must-revalidate">
     <meta http-equiv="Pragma" content="no-cache">
     <meta name="csrf-token" content="{{ csrf_token() }}">
-    <meta name="description" content="">
+    <meta name="description" content="@yield('meta_description', share_plain_text($site?->about_text, 160) ?: ($site?->site_name ?? 'A2 Consulting'))">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="canonical" href="@yield('canonical', url()->current())">
+
+    @php
+        $ogTitle = trim($__env->yieldContent('title', $site?->site_name ?? 'A2 Consulting'));
+        $ogDescription = trim($__env->yieldContent('meta_description', share_plain_text($site?->about_text, 160) ?: ($site?->site_name ?? 'A2 Consulting')));
+        $ogImage = trim($__env->yieldContent('og_image', share_asset_url($site?->logoUrl() ?? 'images/logo.png')));
+        $ogType = trim($__env->yieldContent('og_type', 'website'));
+        $ogUrl = trim($__env->yieldContent('canonical', url()->current()));
+    @endphp
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:type" content="{{ $ogType }}">
+    <meta property="og:site_name" content="{{ $site?->site_name ?? 'A2 Consulting' }}">
+    <meta property="og:title" content="{{ $ogTitle }}">
+    <meta property="og:description" content="{{ $ogDescription }}">
+    <meta property="og:url" content="{{ $ogUrl }}">
+    <meta property="og:image" content="{{ $ogImage }}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ $ogTitle }}">
+    <meta name="twitter:description" content="{{ $ogDescription }}">
+    <meta name="twitter:image" content="{{ $ogImage }}">
     
     <!--====== Title ======-->
     <title>@yield('title', $site?->site_name ?? 'A2 Consulting')</title>
@@ -41,11 +61,11 @@
     <link rel="stylesheet" href="{{ asset('css/default.css') }}">
     
     <!--====== Style css ======-->
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=brand4">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}?v=brand5">
     
     <!--====== Responsive css ======-->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m14">
+    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m15">
   
     @stack('styles')
     <style>
@@ -671,6 +691,65 @@
     
     <!--====== Main js ======-->
     <script src="{{ asset('js/main.js') }}?v=m11"></script>
+    <script>
+    (function () {
+        document.querySelectorAll('[data-share-native]').forEach(function (button) {
+            if (navigator.share) {
+                button.hidden = false;
+            }
+        });
+
+        function feedback(root, message) {
+            if (!root) return;
+            var el = root.querySelector('[data-share-feedback]');
+            if (!el) return;
+            el.hidden = false;
+            el.textContent = message;
+            window.setTimeout(function () {
+                el.hidden = true;
+            }, 3500);
+        }
+
+        function copyLink(url, root, instagram) {
+            var done = function () {
+                feedback(root, instagram
+                    ? 'Lien copié. Ouvrez Instagram et collez-le dans une story ou un message.'
+                    : 'Lien copié. Vous pouvez le coller où vous voulez.');
+            };
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(url).then(done).catch(function () {
+                    window.prompt('Copiez ce lien :', url);
+                });
+                return;
+            }
+            window.prompt('Copiez ce lien :', url);
+            done();
+        }
+
+        document.addEventListener('click', function (event) {
+            var copyBtn = event.target.closest('[data-share-copy]');
+            if (copyBtn) {
+                event.preventDefault();
+                copyLink(
+                    copyBtn.getAttribute('data-share-copy'),
+                    copyBtn.closest('[data-share-bar]'),
+                    copyBtn.getAttribute('data-share-instagram') === '1'
+                );
+                return;
+            }
+
+            var nativeBtn = event.target.closest('[data-share-native]');
+            if (nativeBtn && navigator.share) {
+                event.preventDefault();
+                navigator.share({
+                    title: nativeBtn.getAttribute('data-share-title') || document.title,
+                    text: nativeBtn.getAttribute('data-share-text') || '',
+                    url: nativeBtn.getAttribute('data-share-url') || window.location.href
+                }).catch(function () {});
+            }
+        });
+    })();
+    </script>
     
     @stack('scripts')
 </body>

@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('title', $event->title)
+@section('meta_description', share_plain_text($event->description ?: $event->title))
+@section('og_image', share_asset_url($event->image ?: 'images/event/e-1.jpg'))
+@section('og_type', 'article')
+@section('canonical', route('events.show', $event->id))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => $event->title, 'bannerKey' => 'events'])
@@ -18,6 +22,11 @@
                             @if($event->content)
                                 <div class="mt-20">{!! $event->content !!}</div>
                             @endif
+                            @include('partials.share-bar', [
+                                'url' => route('events.show', $event->id),
+                                'title' => $event->title,
+                                'text' => share_plain_text($event->description ?: $event->title) ?: $event->title,
+                            ])
                         </div>
                     </div>
                     <div class="col-lg-4">

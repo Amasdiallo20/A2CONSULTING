@@ -1,6 +1,9 @@
 @extends('layouts.app')
 
 @section('title', 'Boutique - A2 Consulting')
+@section('meta_description', 'Supports, produits et ressources de la boutique A2 Consulting.')
+@section('og_image', share_asset_url($site?->pageBanner('shop') ?? 'images/page-banner-5.jpg'))
+@section('canonical', route('shop.index'))
 
 @section('content')
 
@@ -9,6 +12,12 @@
 
     <section id="shop-page" class="pt-120 pb-120 gray-bg">
         <div class="container">
+            @include('partials.share-bar', [
+                'url' => route('shop.index'),
+                'title' => 'Boutique A2 Consulting',
+                'text' => 'Découvrez la boutique A2 Consulting.',
+                'compact' => true,
+            ])
             <div class="row">
                 <div class="col-lg-12">
                     @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif

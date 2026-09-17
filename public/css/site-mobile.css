@@ -1044,3 +1044,80 @@ table {
     }
 }
 
+.share-bar {
+    margin: 18px 0 8px;
+    padding: 16px 18px;
+    background: #fff;
+    border: 1px solid #e8edf2;
+    border-radius: 16px;
+}
+
+.share-bar__label {
+    margin: 0 0 10px;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: #0168a3;
+}
+
+.share-bar__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.share-bar__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 8px 12px;
+    border: 0;
+    border-radius: 999px;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.share-bar__btn:hover,
+.share-bar__btn:focus {
+    color: #fff;
+    text-decoration: none;
+    opacity: 0.92;
+}
+
+.share-bar__btn--facebook { background: #1877f2; }
+.share-bar__btn--instagram { background: #e1306c; }
+.share-bar__btn--whatsapp { background: #25d366; }
+.share-bar__btn--twitter { background: #111827; }
+.share-bar__btn--linkedin { background: #0a66c2; }
+.share-bar__btn--copy { background: #0168a3; }
+.share-bar__btn--native { background: #ebae62; color: #1d2025; }
+
+.share-bar__btn--native:hover,
+.share-bar__btn--native:focus {
+    color: #1d2025;
+}
+
+.share-bar__feedback {
+    margin: 10px 0 0;
+    font-size: 13px;
+    color: #0d6e5c;
+}
+
+@media (max-width: 575.98px) {
+    .share-bar__btn span {
+        display: none;
+    }
+
+    .share-bar__btn {
+        width: 40px;
+        justify-content: center;
+        padding: 0;
+    }
+}
+
