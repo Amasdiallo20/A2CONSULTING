@@ -141,6 +141,47 @@
                 </div>
             </div>
 
+            <h5 class="mb-3 mt-2">API de paiement</h5>
+            <p class="text-muted">Choisissez comment encaisser les commandes. En local, le mode « Simulateur » suffit pour tester sans clés. Pour CinetPay ou une API générique, renseignez les identifiants puis passez en mode Production.</p>
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Prestataire</label>
+                    <select name="payment_provider" class="form-select">
+                        <option value="sandbox" @selected(old('payment_provider', $setting->payment_provider ?: 'sandbox') === 'sandbox')>Simulateur local (test)</option>
+                        <option value="manual" @selected(old('payment_provider', $setting->payment_provider) === 'manual')>Transfert manuel (numéros ci-dessus)</option>
+                        <option value="cinetpay" @selected(old('payment_provider', $setting->payment_provider) === 'cinetpay')>CinetPay</option>
+                        <option value="generic" @selected(old('payment_provider', $setting->payment_provider) === 'generic')>API générique (URL JSON)</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Mode</label>
+                    <select name="payment_mode" class="form-select">
+                        <option value="sandbox" @selected(old('payment_mode', $setting->payment_mode ?: 'sandbox') === 'sandbox')>Test</option>
+                        <option value="live" @selected(old('payment_mode', $setting->payment_mode) === 'live')>Production</option>
+                    </select>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <label class="form-label">Devise</label>
+                    <input type="text" name="payment_currency" class="form-control" value="{{ old('payment_currency', $setting->payment_currency ?: 'GNF') }}">
+                </div>
+                <div class="col-md-12 mb-3">
+                    <label class="form-label">URL de l’API (CinetPay ou API générique)</label>
+                    <input type="url" name="payment_api_url" class="form-control" value="{{ old('payment_api_url', $setting->payment_api_url) }}" placeholder="https://api-checkout.cinetpay.com/v2/payment">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Clé API</label>
+                    <input type="password" name="payment_api_key" class="form-control" autocomplete="new-password" placeholder="{{ filled($setting->payment_api_key) ? 'Laisser vide pour conserver' : '' }}">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Secret / webhook</label>
+                    <input type="password" name="payment_api_secret" class="form-control" autocomplete="new-password" placeholder="{{ filled($setting->payment_api_secret) ? 'Laisser vide pour conserver' : '' }}">
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label class="form-label">Site ID (CinetPay)</label>
+                    <input type="text" name="payment_site_id" class="form-control" value="{{ old('payment_site_id', $setting->payment_site_id) }}">
+                </div>
+            </div>
+
             <button type="submit" class="btn btn-primary"><i class="fas fa-save me-2"></i> Enregistrer</button>
         </form>
     </div>

@@ -20,6 +20,8 @@ $files = [
     'routes/admin.php',
     '.htaccess',
     'public/.htaccess',
+    'css/site-mobile.css',
+    'public/css/site-mobile.css',
     'resources/views/pages/home.blade.php',
     'resources/views/pages/events.blade.php',
     'resources/views/pages/events-single.blade.php',

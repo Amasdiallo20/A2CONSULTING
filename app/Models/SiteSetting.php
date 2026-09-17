@@ -49,6 +49,13 @@ class SiteSetting extends Model
         'orange_money_number',
         'mtn_money_number',
         'moov_money_number',
+        'payment_provider',
+        'payment_mode',
+        'payment_currency',
+        'payment_api_url',
+        'payment_api_key',
+        'payment_api_secret',
+        'payment_site_id',
     ];
 
     public static function current(): self
@@ -100,5 +107,10 @@ class SiteSetting extends Model
         };
 
         return $number ?: $this->phone;
+    }
+
+    public function usesManualPayment(): bool
+    {
+        return ($this->payment_provider ?: 'sandbox') === 'manual';
     }
 }

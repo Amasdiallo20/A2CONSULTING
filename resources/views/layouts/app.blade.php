@@ -45,7 +45,7 @@
     
     <!--====== Responsive css ======-->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m4">
+    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m6">
   
     @stack('styles')
     <style>
@@ -350,6 +350,35 @@
             white-space: nowrap;
             font-size: 12px;
         }
+        @media (min-width: 992px) {
+            .navigation .navbar {
+                justify-content: center;
+            }
+            .navigation .navbar-collapse {
+                justify-content: center;
+            }
+            .navigation .navbar .navbar-nav {
+                flex-wrap: nowrap;
+                align-items: center;
+                justify-content: center;
+                width: 100%;
+            }
+            .navigation .navbar .navbar-nav li {
+                margin-right: 28px;
+            }
+            .navigation .navbar .navbar-nav li:last-child {
+                margin-right: 0;
+            }
+            .navigation .navbar .navbar-nav li a {
+                font-size: 14px;
+                white-space: nowrap;
+            }
+        }
+        @media (min-width: 1200px) {
+            .navigation .navbar .navbar-nav li {
+                margin-right: 36px;
+            }
+        }
     </style>
 </head>
 
@@ -423,15 +452,18 @@
                             </button>
 
                             <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
-                                <ul class="navbar-nav mr-auto">
+                                <ul class="navbar-nav mx-auto">
                                     <li class="nav-item">
                                         <a class="{{ request()->routeIs('home') || request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">Accueil</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">À propos</a>
+                                        <a class="{{ request()->routeIs('courses.*') ? 'active' : '' }}" href="{{ route('courses.index') }}">Formations</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="{{ request()->routeIs('courses.*') ? 'active' : '' }}" href="{{ route('courses.index') }}">Formations</a>
+                                        <a class="{{ request()->routeIs('services.*') ? 'active' : '' }}" href="{{ route('services.index') }}">Services</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">À propos</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="{{ request()->routeIs('events.*') ? 'active' : '' }}" href="{{ route('events.index') }}">Événements</a>
@@ -441,9 +473,6 @@
                                     </li>
                                     <li class="nav-item">
                                         <a class="{{ request()->routeIs('shop.*') ? 'active' : '' }}" href="{{ route('shop.index') }}">Boutique</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="{{ request()->routeIs('services.*') ? 'active' : '' }}" href="{{ route('services.index') }}">Services</a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="{{ request()->routeIs('contact') ? 'active' : '' }}" href="{{ route('contact') }}">Contact</a>
@@ -523,15 +552,14 @@
                             </div>
                             <ul>
                                 <li><a href="{{ route('home') }}"><i class="fa fa-angle-right"></i>Accueil</a></li>
-                                <li><a href="{{ route('about') }}"><i class="fa fa-angle-right"></i>À propos</a></li>
                                 <li><a href="{{ route('courses.index') }}"><i class="fa fa-angle-right"></i>Formations</a></li>
                                 <li><a href="{{ route('services.index') }}"><i class="fa fa-angle-right"></i>Services</a></li>
-                                <li><a href="{{ route('blog.index') }}"><i class="fa fa-angle-right"></i>Actualités</a></li>
+                                <li><a href="{{ route('about') }}"><i class="fa fa-angle-right"></i>À propos</a></li>
                             </ul>
                             <ul>
-                                <li><a href="{{ route('shop.index') }}"><i class="fa fa-angle-right"></i>Boutique</a></li>
-                                <li><a href="{{ route('teachers.index') }}"><i class="fa fa-angle-right"></i>Formateurs</a></li>
                                 <li><a href="{{ route('events.index') }}"><i class="fa fa-angle-right"></i>Événements</a></li>
+                                <li><a href="{{ route('blog.index') }}"><i class="fa fa-angle-right"></i>Blog</a></li>
+                                <li><a href="{{ route('shop.index') }}"><i class="fa fa-angle-right"></i>Boutique</a></li>
                                 <li><a href="{{ route('contact') }}"><i class="fa fa-angle-right"></i>Contact</a></li>
                             </ul>
                         </div> <!-- footer link -->

@@ -42,6 +42,13 @@ class SettingController extends Controller
             'orange_money_number' => 'nullable|string|max:50',
             'mtn_money_number' => 'nullable|string|max:50',
             'moov_money_number' => 'nullable|string|max:50',
+            'payment_provider' => 'required|in:manual,sandbox,cinetpay,generic',
+            'payment_mode' => 'required|in:sandbox,live',
+            'payment_currency' => 'required|string|max:10',
+            'payment_api_url' => 'nullable|url|max:255',
+            'payment_api_key' => 'nullable|string|max:255',
+            'payment_api_secret' => 'nullable|string|max:255',
+            'payment_site_id' => 'nullable|string|max:255',
         ];
 
         foreach ($imageFields as $field) {
@@ -52,6 +59,12 @@ class SettingController extends Controller
 
         foreach ($imageFields as $field) {
             $validated[$field] = $this->storeImage($request, $field, 'settings', $setting->{$field}, true);
+        }
+
+        foreach (['payment_api_key', 'payment_api_secret'] as $secret) {
+            if (blank($validated[$secret] ?? null)) {
+                unset($validated[$secret]);
+            }
         }
 
         $setting->fill($validated);

@@ -38,6 +38,7 @@
                     <label class="form-label">Statut paiement</label>
                     <select name="payment_status" class="form-select mb-2">
                         <option value="awaiting" @selected($order->payment_status==='awaiting')>En attente de paiement</option>
+                        <option value="processing" @selected($order->payment_status==='processing')>Paiement en cours</option>
                         <option value="declared" @selected($order->payment_status==='declared')>Déclaré par le client</option>
                         <option value="paid" @selected($order->payment_status==='paid')>Payé</option>
                         <option value="failed" @selected($order->payment_status==='failed')>Échoué</option>

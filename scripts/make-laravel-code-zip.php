@@ -13,7 +13,7 @@ if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
     exit(1);
 }
 
-$dirs = ['app', 'bootstrap', 'config', 'database', 'resources/views', 'routes'];
+$dirs = ['app', 'bootstrap', 'config', 'database', 'resources/views', 'routes', 'css', 'public/css'];
 foreach ($dirs as $dir) {
     $fullDir = $root . DIRECTORY_SEPARATOR . str_replace('/', DIRECTORY_SEPARATOR, $dir);
     if (! is_dir($fullDir)) {
@@ -36,7 +36,7 @@ foreach ($dirs as $dir) {
     }
 }
 
-foreach (['artisan', 'composer.json', 'composer.lock'] as $file) {
+foreach (['artisan', 'composer.json', 'composer.lock', '.htaccess', 'public/.htaccess'] as $file) {
     $zip->addFile($root . DIRECTORY_SEPARATOR . $file, $file);
 }
 

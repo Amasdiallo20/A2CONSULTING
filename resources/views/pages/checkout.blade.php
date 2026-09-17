@@ -36,6 +36,9 @@
 
                             <h4 class="mt-40">Paiement Mobile Money</h4>
                             <p class="mb-0"><small>Choisissez l’opérateur et le numéro qui enverra l’argent.</small></p>
+                            @if(! $site->usesManualPayment())
+                                <p class="mb-0"><small>Après validation, vous serez redirigé vers le paiement (API configurée dans l’administration).</small></p>
+                            @endif
                             <div class="row mt-20">
                                 @foreach(['orange' => 'Orange Money', 'mtn' => 'MTN Mobile Money', 'moov' => 'Moov Money'] as $value => $label)
                                 <div class="col-12 col-md-4 mb-2">
@@ -70,7 +73,13 @@
                         </ul>
                         <hr>
                         <h5>Total : {{ format_price($total) }}</h5>
-                        <p class="mt-20"><small>Après validation, vous recevrez les instructions pour payer via Orange Money, MTN ou Moov.</small></p>
+                        <p class="mt-20"><small>
+                            @if($site->usesManualPayment())
+                                Après validation, vous recevrez les instructions pour payer via Orange Money, MTN ou Moov.
+                            @else
+                                Le paiement sera initié via l’API configurée dans l’administration (mode {{ $site->payment_mode ?: 'sandbox' }}).
+                            @endif
+                        </small></p>
                     </div>
                 </div>
             </div>

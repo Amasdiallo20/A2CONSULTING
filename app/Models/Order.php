@@ -20,6 +20,8 @@ class Order extends Model
         'momo_phone',
         'payment_status',
         'payment_reference',
+        'payment_url',
+        'payment_token',
     ];
 
     protected $casts = [
@@ -46,6 +48,7 @@ class Order extends Model
         return match ($this->payment_status) {
             'paid' => 'Payé',
             'declared' => 'Déclaré par le client',
+            'processing' => 'Paiement en cours',
             'failed' => 'Échoué',
             default => 'En attente de paiement',
         };

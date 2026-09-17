@@ -44,6 +44,11 @@ Route::get('/commande', [CheckoutController::class, 'show'])->name('checkout.sho
 Route::post('/commande', [CheckoutController::class, 'store'])->name('checkout.store');
 Route::get('/commande/{order}/merci', [CheckoutController::class, 'thanks'])->name('checkout.thanks');
 Route::post('/commande/{order}/paiement', [CheckoutController::class, 'confirmPayment'])->name('checkout.confirmPayment');
+Route::get('/commande/{order}/retour', [CheckoutController::class, 'returnFromProvider'])->name('checkout.return');
+Route::get('/commande/{order}/simulateur', [CheckoutController::class, 'simulate'])->name('checkout.simulate');
+Route::post('/commande/{order}/simulateur', [CheckoutController::class, 'simulateSubmit'])->name('checkout.simulate.submit');
+Route::get('/paiements/webhook', [CheckoutController::class, 'webhookStatus'])->name('payments.webhook.status');
+Route::match(['post', 'head'], '/paiements/webhook', [CheckoutController::class, 'webhook'])->name('payments.webhook');
 
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services.show');

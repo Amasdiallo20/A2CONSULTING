@@ -6,7 +6,9 @@ use App\Models\Course;
 use App\Models\CourseRegistration;
 use App\Models\Order;
 use App\Models\ShopProduct;
+use App\Models\SiteSetting;
 use App\Services\Cart;
+use App\Services\Payments\PaymentManager;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -22,11 +24,11 @@ class CheckoutController extends Controller
         return view('pages.checkout', [
             'items' => $items,
             'total' => Cart::total(),
-            'site' => \App\Models\SiteSetting::current(),
+            'site' => SiteSetting::current(),
         ]);
     }
 
-    public function store(Request $request)
+    public function store(Request $request, PaymentManager $payments)
     {
         $items = Cart::items();
         if (empty($items)) {
@@ -45,53 +47,53 @@ class CheckoutController extends Controller
 
         try {
             $order = DB::transaction(function () use ($validated, $items) {
-            $order = Order::create([
-                'reference' => 'CMD-' . now()->format('YmdHis') . '-' . random_int(10, 99),
-                'name' => $validated['name'],
-                'email' => $validated['email'],
-                'phone' => $validated['phone'],
-                'address' => $validated['address'],
-                'notes' => $validated['notes'] ?? null,
-                'total' => Cart::total(),
-                'status' => 'pending',
-                'payment_method' => 'mobile_money',
-                'payment_operator' => $validated['payment_operator'],
-                'momo_phone' => $validated['momo_phone'],
-                'payment_status' => 'awaiting',
-            ]);
-
-            foreach ($items as $item) {
-                $order->items()->create([
-                    'item_type' => $item['type'],
-                    'item_id' => $item['id'],
-                    'title' => $item['title'],
-                    'unit_price' => $item['unit_price'],
-                    'quantity' => $item['quantity'],
-                    'line_total' => $item['unit_price'] * $item['quantity'],
+                $order = Order::create([
+                    'reference' => 'CMD-'.now()->format('YmdHis').'-'.random_int(10, 99),
+                    'name' => $validated['name'],
+                    'email' => $validated['email'],
+                    'phone' => $validated['phone'],
+                    'address' => $validated['address'],
+                    'notes' => $validated['notes'] ?? null,
+                    'total' => Cart::total(),
+                    'status' => 'pending',
+                    'payment_method' => 'mobile_money',
+                    'payment_operator' => $validated['payment_operator'],
+                    'momo_phone' => $validated['momo_phone'],
+                    'payment_status' => 'awaiting',
                 ]);
 
-                if ($item['type'] === 'product') {
-                    $product = ShopProduct::where('id', $item['id'])->lockForUpdate()->first();
-                    if (! $product || $product->stock_quantity < $item['quantity']) {
-                        throw new \RuntimeException('Stock insuffisant pour ' . $item['title']);
-                    }
-                    $product->decrement('stock_quantity', $item['quantity']);
-                }
-
-                if ($item['type'] === 'course' && Course::where('id', $item['id'])->exists()) {
-                    CourseRegistration::create([
-                        'course_id' => $item['id'],
-                        'name' => $validated['name'],
-                        'email' => $validated['email'],
-                        'phone' => $validated['phone'],
-                        'message' => 'Commande ' . $order->reference,
-                        'status' => 'pending',
+                foreach ($items as $item) {
+                    $order->items()->create([
+                        'item_type' => $item['type'],
+                        'item_id' => $item['id'],
+                        'title' => $item['title'],
+                        'unit_price' => $item['unit_price'],
+                        'quantity' => $item['quantity'],
+                        'line_total' => $item['unit_price'] * $item['quantity'],
                     ]);
-                }
-            }
 
-            return $order;
-        });
+                    if ($item['type'] === 'product') {
+                        $product = ShopProduct::where('id', $item['id'])->lockForUpdate()->first();
+                        if (! $product || $product->stock_quantity < $item['quantity']) {
+                            throw new \RuntimeException('Stock insuffisant pour '.$item['title']);
+                        }
+                        $product->decrement('stock_quantity', $item['quantity']);
+                    }
+
+                    if ($item['type'] === 'course' && Course::where('id', $item['id'])->exists()) {
+                        CourseRegistration::create([
+                            'course_id' => $item['id'],
+                            'name' => $validated['name'],
+                            'email' => $validated['email'],
+                            'phone' => $validated['phone'],
+                            'message' => 'Commande '.$order->reference,
+                            'status' => 'pending',
+                        ]);
+                    }
+                }
+
+                return $order;
+            });
         } catch (\Throwable $e) {
             return back()->withInput()->with('error', $e->getMessage());
         }
@@ -102,15 +104,30 @@ class CheckoutController extends Controller
         $orderIds[] = $order->id;
         session(['checkout_orders' => array_values(array_unique($orderIds))]);
 
+        $result = $payments->initiate($order, SiteSetting::current());
+        $order->refresh();
+
+        if (! $result->ok) {
+            return redirect()->route('checkout.thanks', $order)
+                ->with('error', $result->message ?: 'Le paiement en ligne est indisponible.');
+        }
+
+        if ($result->redirectUrl) {
+            return redirect()->away($result->redirectUrl);
+        }
+
         return redirect()->route('checkout.thanks', $order)
             ->with('success', 'Votre commande a bien été enregistrée.');
     }
 
-    public function thanks(Order $order)
+    public function thanks(Request $request, Order $order)
     {
-        $this->assertOwnsOrder($order);
+        if (! $request->hasValidSignature()) {
+            $this->assertOwnsOrder($order);
+        }
+
         $order->load('items');
-        $site = \App\Models\SiteSetting::current();
+        $site = SiteSetting::current();
 
         return view('pages.checkout-thanks', compact('order', 'site'));
     }
@@ -133,6 +150,67 @@ class CheckoutController extends Controller
         ]);
 
         return back()->with('success', 'Merci. Votre paiement Mobile Money est en cours de vérification.');
+    }
+
+    public function simulate(Order $order)
+    {
+        $this->assertOwnsOrder($order);
+        $site = SiteSetting::current();
+
+        if ($site->usesManualPayment()) {
+            return redirect()->route('checkout.thanks', $order);
+        }
+
+        return view('pages.checkout-simulate', compact('order', 'site'));
+    }
+
+    public function simulateSubmit(Request $request, Order $order, PaymentManager $payments)
+    {
+        $this->assertOwnsOrder($order);
+
+        $validated = $request->validate([
+            'outcome' => 'required|in:paid,failed',
+        ]);
+
+        if ($validated['outcome'] === 'paid') {
+            $payments->markPaid($order, 'SIM-'.$order->reference);
+        } else {
+            $order->update(['payment_status' => 'failed']);
+        }
+
+        return redirect()->route('checkout.thanks', $order);
+    }
+
+    public function returnFromProvider(Request $request, Order $order)
+    {
+        if (! $request->hasValidSignature()) {
+            $this->assertOwnsOrder($order);
+        } else {
+            $ids = array_map('intval', session('checkout_orders', []));
+            $ids[] = (int) $order->id;
+            session(['checkout_orders' => array_values(array_unique($ids))]);
+        }
+
+        return redirect()->route('checkout.thanks', $order);
+    }
+
+    public function webhookStatus()
+    {
+        return view('pages.checkout-webhook');
+    }
+
+    public function webhook(Request $request, PaymentManager $payments)
+    {
+        if ($request->isMethod('HEAD')) {
+            return response('', 200);
+        }
+
+        $order = $payments->handleWebhook($request, SiteSetting::current());
+
+        return response()->json([
+            'ok' => (bool) $order,
+            'reference' => $order?->reference,
+        ]);
     }
 
     private function assertOwnsOrder(Order $order): void

@@ -53,6 +53,8 @@
                             <span class="badge bg-success">Payé</span>
                         @elseif($order->payment_status === 'declared')
                             <span class="badge bg-info">À vérifier</span>
+                        @elseif($order->payment_status === 'processing')
+                            <span class="badge bg-warning text-dark">En cours</span>
                         @else
                             <span class="badge bg-secondary">{{ $order->paymentStatusLabel() }}</span>
                         @endif

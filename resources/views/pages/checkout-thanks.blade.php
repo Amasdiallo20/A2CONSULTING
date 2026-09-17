@@ -7,6 +7,7 @@
     <section class="pt-90 pb-120 gray-bg">
         <div class="container">
             @if(session('success'))<div class="alert alert-success">{{ session('success') }}</div>@endif
+            @if(session('error'))<div class="alert alert-danger">{{ session('error') }}</div>@endif
             @if($errors->any())
                 <div class="alert alert-danger">
                     @foreach($errors->all() as $error)<div>{{ $error }}</div>@endforeach
@@ -15,6 +16,7 @@
 
             @php
                 $merchant = $site->mobileMoneyNumber($order->payment_operator);
+                $manual = $site->usesManualPayment() || $order->payment_status === 'awaiting';
             @endphp
 
             <div class="row justify-content-center">
@@ -24,12 +26,25 @@
                         <p>Montant à payer : <strong>{{ format_price($order->total) }}</strong></p>
                         <p>Opérateur : <strong>{{ $order->operatorLabel() }}</strong></p>
                         <p>Votre numéro : <strong>{{ $order->momo_phone }}</strong></p>
+                        <p>Statut : <strong>{{ $order->paymentStatusLabel() }}</strong></p>
 
                         @if($order->payment_status === 'paid')
                             <div class="alert alert-success">Paiement confirmé. Merci.</div>
                         @elseif($order->payment_status === 'declared')
                             <div class="alert alert-info">Votre paiement est en cours de vérification par A2 Consulting.</div>
-                        @else
+                        @elseif($order->payment_status === 'processing')
+                            <div class="alert alert-info">
+                                Paiement en cours auprès de l’opérateur. Validez la demande sur votre téléphone si elle apparaît.
+                            </div>
+                            @if($order->payment_url)
+                                <a href="{{ $order->payment_url }}" class="main-btn">Reprendre le paiement</a>
+                            @endif
+                        @elseif($order->payment_status === 'failed')
+                            <div class="alert alert-danger">Le paiement n’a pas abouti.</div>
+                            @if($order->payment_url)
+                                <a href="{{ $order->payment_url }}" class="main-btn">Réessayer</a>
+                            @endif
+                        @elseif($manual)
                             <div class="alert alert-warning">
                                 <strong>Étape 1 — Envoyez le paiement</strong><br>
                                 Transférez <strong>{{ format_price($order->total) }}</strong> via {{ $order->operatorLabel() }} vers le numéro :
