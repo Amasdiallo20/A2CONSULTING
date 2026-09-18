@@ -42,7 +42,8 @@ function share_asset_url(?string $path = null): string
 
 function share_plain_text(?string $value, int $limit = 180): string
 {
-    $text = trim(preg_replace('/\s+/', ' ', strip_tags((string) $value) ?: ''));
+    $text = html_entity_decode(strip_tags((string) $value), ENT_QUOTES | ENT_HTML5, 'UTF-8');
+    $text = trim(preg_replace('/\s+/', ' ', $text) ?: '');
 
     return $text === '' ? '' : \Illuminate\Support\Str::limit($text, $limit);
 }

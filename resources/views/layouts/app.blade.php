@@ -65,7 +65,7 @@
     
     <!--====== Responsive css ======-->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m15">
+    <link rel="stylesheet" href="{{ asset('css/site-mobile.css') }}?v=m25">
   
     @stack('styles')
     <style>
@@ -384,19 +384,22 @@
                 width: 100%;
             }
             .navigation .navbar .navbar-nav li {
-                margin-right: 28px;
+                margin-right: 18px;
             }
             .navigation .navbar .navbar-nav li:last-child {
                 margin-right: 0;
             }
             .navigation .navbar .navbar-nav li a {
-                font-size: 14px;
+                font-size: 13px;
                 white-space: nowrap;
             }
         }
         @media (min-width: 1200px) {
             .navigation .navbar .navbar-nav li {
-                margin-right: 36px;
+                margin-right: 26px;
+            }
+            .navigation .navbar .navbar-nav li a {
+                font-size: 14px;
             }
         }
     </style>
@@ -483,6 +486,9 @@
                                         <a class="{{ request()->routeIs('services.*') ? 'active' : '' }}" href="{{ route('services.index') }}">Services</a>
                                     </li>
                                     <li class="nav-item">
+                                        <a class="{{ request()->routeIs('software.*') ? 'active' : '' }}" href="{{ route('software.index') }}">Logiciels</a>
+                                    </li>
+                                    <li class="nav-item">
                                         <a class="{{ request()->routeIs('about') ? 'active' : '' }}" href="{{ route('about') }}">À propos</a>
                                     </li>
                                     <li class="nav-item">
@@ -556,7 +562,7 @@
                             <div class="logo">
                                 @include('partials.brand-logo', ['variant' => 'brand-logo--light'])
                             </div>
-                            <p>{{ \Illuminate\Support\Str::limit(strip_tags($site?->about_text), 180) }}</p>
+                            <p>{{ share_plain_text($site?->about_text, 180) }}</p>
                             <ul class="mt-20">
                                 @if($site?->facebook)<li><a href="{{ $site->facebook }}"><i class="fa fa-facebook-f"></i></a></li>@endif
                                 @if($site?->twitter)<li><a href="{{ $site->twitter }}"><i class="fa fa-twitter"></i></a></li>@endif
@@ -574,6 +580,7 @@
                                 <li><a href="{{ route('home') }}"><i class="fa fa-angle-right"></i>Accueil</a></li>
                                 <li><a href="{{ route('courses.index') }}"><i class="fa fa-angle-right"></i>Formations</a></li>
                                 <li><a href="{{ route('services.index') }}"><i class="fa fa-angle-right"></i>Services</a></li>
+                                <li><a href="{{ route('software.index') }}"><i class="fa fa-angle-right"></i>Logiciels</a></li>
                                 <li><a href="{{ route('about') }}"><i class="fa fa-angle-right"></i>À propos</a></li>
                             </ul>
                             <ul>

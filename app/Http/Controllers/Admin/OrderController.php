@@ -30,7 +30,7 @@ class OrderController extends Controller
     {
         $validated = $request->validate([
             'status' => 'required|in:pending,confirmed,cancelled',
-            'payment_status' => 'nullable|in:awaiting,declared,processing,paid,failed',
+            'payment_status' => 'nullable|in:awaiting,declared,processing,paid,failed,cod',
         ]);
 
         $data = ['status' => $validated['status']];

@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\CourseController;
 use App\Http\Controllers\Admin\ServiceController;
+use App\Http\Controllers\Admin\SoftwareProductController;
 use App\Http\Controllers\Admin\EventController;
 use App\Http\Controllers\Admin\RegistrationController;
 use App\Http\Controllers\Admin\BlogController;
@@ -16,6 +17,8 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\SettingController;
 use App\Http\Controllers\Admin\ContactMessageController;
 use App\Http\Controllers\Admin\UploadController;
+use App\Http\Controllers\Admin\PartnerController;
+use App\Http\Controllers\Admin\TestimonialController;
 
 // Alias attendu par Laravel (auth / exceptions) : route('login')
 Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
@@ -42,6 +45,7 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', \App\Http\M
     
     // Routes pour les services
     Route::resource('services', ServiceController::class);
+    Route::resource('software', SoftwareProductController::class)->except(['show'])->parameters(['software' => 'software']);
     
     // Routes pour les événements
     Route::resource('events', EventController::class);
@@ -73,5 +77,8 @@ Route::prefix('admin')->name('admin.')->middleware(['auth', 'admin', \App\Http\M
     Route::delete('/messages/{message}', [ContactMessageController::class, 'destroy'])->name('messages.destroy');
 
     Route::resource('users', UserController::class);
+
+    Route::resource('partners', PartnerController::class)->except(['show']);
+    Route::resource('testimonials', TestimonialController::class)->except(['show']);
 });
 

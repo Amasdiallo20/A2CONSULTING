@@ -34,27 +34,46 @@
                                 <textarea name="notes" placeholder="Message (facultatif)" rows="4">{{ old('notes') }}</textarea>
                             </div>
 
-                            <h4 class="mt-40">Paiement Mobile Money</h4>
-                            <p class="mb-0"><small>Choisissez l’opérateur et le numéro qui enverra l’argent.</small></p>
-                            @if(! $site->usesManualPayment())
-                                <p class="mb-0"><small>Après validation, vous serez redirigé vers le paiement (API configurée dans l’administration).</small></p>
-                            @endif
-                            <div class="row mt-20">
-                                @foreach(['orange' => 'Orange Money', 'mtn' => 'MTN Mobile Money', 'moov' => 'Moov Money'] as $value => $label)
-                                <div class="col-12 col-md-4 mb-2">
-                                    <label style="display:block;border:1px solid #ddd;border-radius:8px;padding:12px;cursor:pointer;">
-                                        <input type="radio" name="payment_operator" value="{{ $value }}" {{ old('payment_operator', 'orange') === $value ? 'checked' : '' }} required>
-                                        <strong>{{ $label }}</strong>
+                            @php $payMethod = old('payment_method', 'cash_on_delivery'); @endphp
+                            <h4 class="mt-40">Mode de paiement</h4>
+                            <p class="mb-0"><small>Choisissez comment régler votre commande.</small></p>
+                            <div class="row mt-20 checkout-pay-methods">
+                                <div class="col-12 col-md-6 mb-2">
+                                    <label class="checkout-pay-card">
+                                        <input type="radio" name="payment_method" value="cash_on_delivery" {{ $payMethod === 'cash_on_delivery' ? 'checked' : '' }} required>
+                                        <span class="checkout-pay-card__title">Paiement à la livraison</span>
+                                        <span class="checkout-pay-card__hint">Vous réglez en espèces ou Mobile Money à la réception.</span>
                                     </label>
                                 </div>
-                                @endforeach
+                                <div class="col-12 col-md-6 mb-2">
+                                    <label class="checkout-pay-card">
+                                        <input type="radio" name="payment_method" value="mobile_money" {{ $payMethod === 'mobile_money' ? 'checked' : '' }} required>
+                                        <span class="checkout-pay-card__title">Paiement Mobile Money</span>
+                                        <span class="checkout-pay-card__hint">Orange Money ou MTN — paiement immédiat.</span>
+                                    </label>
+                                </div>
                             </div>
-                            <div class="form-singel mt-20">
-                                <input type="text" name="momo_phone" placeholder="Numéro Mobile Money *" value="{{ old('momo_phone') }}" required>
+
+                            <div id="js-momo-fields" class="checkout-momo-fields" @if($payMethod !== 'mobile_money') hidden @endif>
+                                <h5 class="mt-30">Paiement Mobile Money</h5>
+                                <p class="mb-0"><small>Choisissez l’opérateur et le numéro qui enverra l’argent.</small></p>
+                                <div class="row mt-20">
+                                    @foreach(['orange' => 'Orange Money', 'mtn' => 'MTN Mobile Money'] as $opValue => $opName)
+                                    <div class="col-12 col-md-6 mb-2">
+                                        <label class="checkout-pay-card checkout-pay-card--sm">
+                                            <input type="radio" name="payment_operator" value="{{ $opValue }}" {{ old('payment_operator', 'orange') === $opValue ? 'checked' : '' }}>
+                                            <strong>{{ $opName }}</strong>
+                                        </label>
+                                    </div>
+                                    @endforeach
+                                </div>
+                                <div class="form-singel mt-20">
+                                    <input type="text" name="momo_phone" placeholder="Numéro Mobile Money *" value="{{ old('momo_phone') }}">
+                                </div>
                             </div>
 
                             <div class="form-singel mt-30">
-                                <button type="submit" class="main-btn">Payer par Mobile Money</button>
+                                <button type="submit" class="main-btn" id="js-checkout-submit">Confirmer la commande</button>
                             </div>
                         </form>
                     </div>
@@ -73,16 +92,38 @@
                         </ul>
                         <hr>
                         <h5>Total : {{ format_price($total) }}</h5>
-                        <p class="mt-20"><small>
-                            @if($site->usesManualPayment())
-                                Après validation, vous recevrez les instructions pour payer via Orange Money, MTN ou Moov.
-                            @else
-                                Le paiement sera initié via l’API configurée dans l’administration (mode {{ $site->payment_mode ?: 'sandbox' }}).
-                            @endif
-                        </small></p>
+                        <p class="mt-20"><small>Paiement à la livraison ou Mobile Money, au choix.</small></p>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 @endsection
+
+@push('scripts')
+<script>
+(function () {
+    var form = document.querySelector('.checkout-box form');
+    if (!form) return;
+    var momo = document.getElementById('js-momo-fields');
+    var submit = document.getElementById('js-checkout-submit');
+
+    function syncPay() {
+        var method = (form.querySelector('input[name="payment_method"]:checked') || {}).value;
+        var isMomo = method === 'mobile_money';
+        if (momo) momo.hidden = !isMomo;
+        form.querySelectorAll('input[name="payment_operator"]').forEach(function (el) {
+            el.required = isMomo;
+        });
+        var phone = form.querySelector('input[name="momo_phone"]');
+        if (phone) phone.required = isMomo;
+        if (submit) submit.textContent = isMomo ? 'Payer par Mobile Money' : 'Confirmer la commande';
+    }
+
+    form.querySelectorAll('input[name="payment_method"]').forEach(function (el) {
+        el.addEventListener('change', syncPay);
+    });
+    syncPay();
+})();
+</script>
+@endpush

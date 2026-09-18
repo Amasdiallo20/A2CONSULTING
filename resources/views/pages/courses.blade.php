@@ -32,8 +32,8 @@
                                 <span class="courses-toolbar__label">Format</span>
                                 <select name="mode" class="courses-filter-select js-auto-submit js-skip-nice-select" onchange="this.form.submit()">
                                     <option value="">Tous les formats</option>
-                                    @foreach(\App\Models\Course::DELIVERY_MODES as $value => $label)
-                                        <option value="{{ $value }}" {{ request('mode') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                                    @foreach(\App\Models\Course::DELIVERY_MODES as $modeValue => $modeLabel)
+                                        <option value="{{ $modeValue }}" {{ request('mode') === $modeValue ? 'selected' : '' }}>{{ $modeLabel }}</option>
                                     @endforeach
                                 </select>
                             </label>
@@ -58,7 +58,9 @@
                 <div class="col-12"><p class="text-center mt-40">Aucune formation pour ces critères.</p></div>
                 @endforelse
             </div>
-            <div class="mt-40">{{ $courses->links() }}</div>
+            <div class="mt-40">
+                {{ $courses->onEachSide(1)->links() }}
+            </div>
         </div>
     </section>
 @endsection

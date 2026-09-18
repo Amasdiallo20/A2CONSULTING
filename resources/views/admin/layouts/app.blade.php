@@ -193,6 +193,11 @@
                             </a>
                         </li>
                         <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.software.*') ? 'active' : '' }}" href="{{ route('admin.software.index') }}">
+                                <i class="fas fa-laptop me-2"></i> Logiciels
+                            </a>
+                        </li>
+                        <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.events.*') ? 'active' : '' }}" href="{{ route('admin.events.index') }}">
                                 <i class="fas fa-calendar-alt me-2"></i> Événements
                             </a>
@@ -239,6 +244,16 @@
                         <li class="nav-item">
                             <a class="nav-link {{ request()->routeIs('admin.users.*') ? 'active' : '' }}" href="{{ route('admin.users.index') }}">
                                 <i class="fas fa-users me-2"></i> Utilisateurs
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.partners.*') ? 'active' : '' }}" href="{{ route('admin.partners.index') }}">
+                                <i class="fas fa-handshake me-2"></i> Partenaires
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('admin.testimonials.*') ? 'active' : '' }}" href="{{ route('admin.testimonials.index') }}">
+                                <i class="fas fa-quote-left me-2"></i> Témoignages
                             </a>
                         </li>
                         <li class="nav-item">

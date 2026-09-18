@@ -21,11 +21,14 @@
                 <p class="mb-1">{{ $order->address }}</p>
                 @if($order->notes)<p class="mt-3">{{ $order->notes }}</p>@endif
                 <hr>
-                <h5>Mobile Money</h5>
-                <p class="mb-1">{{ $order->operatorLabel() }}</p>
-                <p class="mb-1">N° client : {{ $order->momo_phone ?: '—' }}</p>
-                <p class="mb-1">Transaction : {{ $order->payment_reference ?: '—' }}</p>
-                <p class="mb-1">Paiement : <strong>{{ $order->paymentStatusLabel() }}</strong></p>
+                <h5>Paiement</h5>
+                <p class="mb-1">Mode : <strong>{{ $order->paymentMethodLabel() }}</strong></p>
+                @unless($order->isCashOnDelivery())
+                    <p class="mb-1">{{ $order->operatorLabel() }}</p>
+                    <p class="mb-1">N° client : {{ $order->momo_phone ?: '—' }}</p>
+                    <p class="mb-1">Transaction : {{ $order->payment_reference ?: '—' }}</p>
+                @endunless
+                <p class="mb-1">Statut paiement : <strong>{{ $order->paymentStatusLabel() }}</strong></p>
                 <form action="{{ route('admin.orders.updateStatus', $order) }}" method="POST" class="mt-3">
                     @csrf
                     @method('PUT')
@@ -37,6 +40,7 @@
                     </select>
                     <label class="form-label">Statut paiement</label>
                     <select name="payment_status" class="form-select mb-2">
+                        <option value="cod" @selected($order->payment_status==='cod')>À payer à la livraison</option>
                         <option value="awaiting" @selected($order->payment_status==='awaiting')>En attente de paiement</option>
                         <option value="processing" @selected($order->payment_status==='processing')>Paiement en cours</option>
                         <option value="declared" @selected($order->payment_status==='declared')>Déclaré par le client</option>

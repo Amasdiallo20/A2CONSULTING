@@ -41,12 +41,19 @@ class CheckoutController extends Controller
             'phone' => 'required|string|max:50',
             'address' => 'required|string|max:255',
             'notes' => 'nullable|string|max:2000',
-            'payment_operator' => 'required|in:orange,mtn,moov',
-            'momo_phone' => 'required|string|max:50',
+            'payment_method' => 'required|in:cash_on_delivery,mobile_money',
+            'payment_operator' => 'required_if:payment_method,mobile_money|nullable|in:orange,mtn',
+            'momo_phone' => 'required_if:payment_method,mobile_money|nullable|string|max:50',
+        ], [
+            'payment_method.required' => 'Choisissez un mode de paiement.',
+            'payment_operator.required_if' => 'Choisissez un opérateur Mobile Money.',
+            'momo_phone.required_if' => 'Indiquez le numéro Mobile Money qui paiera.',
         ]);
 
+        $isCod = $validated['payment_method'] === 'cash_on_delivery';
+
         try {
-            $order = DB::transaction(function () use ($validated, $items) {
+            $order = DB::transaction(function () use ($validated, $items, $isCod) {
                 $order = Order::create([
                     'reference' => 'CMD-'.now()->format('YmdHis').'-'.random_int(10, 99),
                     'name' => $validated['name'],
@@ -56,10 +63,10 @@ class CheckoutController extends Controller
                     'notes' => $validated['notes'] ?? null,
                     'total' => Cart::total(),
                     'status' => 'pending',
-                    'payment_method' => 'mobile_money',
-                    'payment_operator' => $validated['payment_operator'],
-                    'momo_phone' => $validated['momo_phone'],
-                    'payment_status' => 'awaiting',
+                    'payment_method' => $isCod ? 'cash_on_delivery' : 'mobile_money',
+                    'payment_operator' => $isCod ? null : ($validated['payment_operator'] ?? null),
+                    'momo_phone' => $isCod ? null : ($validated['momo_phone'] ?? null),
+                    'payment_status' => $isCod ? 'cod' : 'awaiting',
                 ]);
 
                 foreach ($items as $item) {
@@ -104,6 +111,11 @@ class CheckoutController extends Controller
         $orderIds[] = $order->id;
         session(['checkout_orders' => array_values(array_unique($orderIds))]);
 
+        if ($isCod) {
+            return redirect()->route('checkout.thanks', $order)
+                ->with('success', 'Votre commande est enregistrée. Vous paierez à la livraison.');
+        }
+
         $result = $payments->initiate($order, SiteSetting::current());
         $order->refresh();
 
@@ -136,6 +148,10 @@ class CheckoutController extends Controller
     {
         $this->assertOwnsOrder($order);
 
+        if ($order->isCashOnDelivery()) {
+            return back()->with('error', 'Cette commande se paie à la livraison.');
+        }
+
         if ($order->payment_status === 'paid') {
             return back()->with('success', 'Cette commande est déjà marquée comme payée.');
         }
@@ -155,6 +171,9 @@ class CheckoutController extends Controller
     public function simulate(Order $order)
     {
         $this->assertOwnsOrder($order);
+        if ($order->isCashOnDelivery()) {
+            return redirect()->route('checkout.thanks', $order);
+        }
         $site = SiteSetting::current();
 
         if ($site->usesManualPayment()) {

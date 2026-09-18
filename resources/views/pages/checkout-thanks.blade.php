@@ -1,8 +1,11 @@
 @extends('layouts.app')
-@section('title', 'Paiement Mobile Money')
+@section('title', $order->isCashOnDelivery() ? 'Commande enregistrée' : 'Paiement Mobile Money')
 @section('content')
     @include('partials.preloader')
-    @include('partials.page-banner', ['title' => 'Paiement Mobile Money', 'bannerKey' => 'shop'])
+    @include('partials.page-banner', [
+        'title' => $order->isCashOnDelivery() ? 'Commande enregistrée' : 'Paiement Mobile Money',
+        'bannerKey' => 'shop',
+    ])
 
     <section class="pt-90 pb-120 gray-bg">
         <div class="container">
@@ -23,12 +26,20 @@
                 <div class="col-lg-8">
                     <div style="background:#fff;padding:30px;border-radius:8px;">
                         <h3>Commande {{ $order->reference }}</h3>
-                        <p>Montant à payer : <strong>{{ format_price($order->total) }}</strong></p>
-                        <p>Opérateur : <strong>{{ $order->operatorLabel() }}</strong></p>
-                        <p>Votre numéro : <strong>{{ $order->momo_phone }}</strong></p>
+                        <p>Montant : <strong>{{ format_price($order->total) }}</strong></p>
+                        <p>Mode de paiement : <strong>{{ $order->paymentMethodLabel() }}</strong></p>
+                        @unless($order->isCashOnDelivery())
+                            <p>Opérateur : <strong>{{ $order->operatorLabel() }}</strong></p>
+                            <p>Votre numéro : <strong>{{ $order->momo_phone }}</strong></p>
+                        @endunless
                         <p>Statut : <strong>{{ $order->paymentStatusLabel() }}</strong></p>
 
-                        @if($order->payment_status === 'paid')
+                        @if($order->isCashOnDelivery())
+                            <div class="alert alert-success">
+                                Votre commande est enregistrée. Préparez <strong>{{ format_price($order->total) }}</strong>
+                                à la livraison (espèces ou Mobile Money auprès du livreur).
+                            </div>
+                        @elseif($order->payment_status === 'paid')
                             <div class="alert alert-success">Paiement confirmé. Merci.</div>
                         @elseif($order->payment_status === 'declared')
                             <div class="alert alert-info">Votre paiement est en cours de vérification par A2 Consulting.</div>

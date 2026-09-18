@@ -1,5 +1,9 @@
 @extends('layouts.app')
 @section('title', $service->title)
+@section('meta_description', share_plain_text($service->description ?: $service->title))
+@section('og_image', share_asset_url($service->image ?: ($site?->pageBanner('services') ?? 'images/page-banner-2.jpg')))
+@section('og_type', 'article')
+@section('canonical', route('services.show', $service->id))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => $service->title, 'bannerKey' => 'services'])
@@ -8,6 +12,11 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8">
+                    @include('partials.share-bar', [
+                        'url' => route('services.show', $service->id),
+                        'title' => $service->title,
+                        'text' => share_plain_text($service->description ?: $service->title) ?: $service->title,
+                    ])
                     @if($service->image)
                         <img src="{{ asset($service->image) }}" alt="{{ $service->title }}">
                     @endif

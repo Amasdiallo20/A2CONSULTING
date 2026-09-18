@@ -171,6 +171,35 @@
     </section>
     @endif
 
+    @if($softwareProducts->isNotEmpty())
+    <section id="software-part" class="pt-70 pb-110">
+        <div class="container">
+            <div class="row align-items-end">
+                <div class="col-lg-7">
+                    <div class="section-title pb-45">
+                        <h5>Logiciels</h5>
+                        <h2>Nos applications</h2>
+                    </div>
+                </div>
+                <div class="col-lg-5">
+                    <div class="products-btn text-right pb-45">
+                        <a href="{{ route('software.index') }}" class="main-btn">Tous les logiciels</a>
+                    </div>
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                @foreach($softwareProducts as $product)
+                <div class="col-12 col-md-6 col-lg-4">
+                    <div class="mt-20">
+                        @include('partials.software-card', ['product' => $product, 'compact' => true])
+                    </div>
+                </div>
+                @endforeach
+            </div>
+        </div>
+    </section>
+    @endif
+
     @if($teachers->isNotEmpty())
     <section id="teachers-part" class="pt-70 pb-120">
         <div class="container">
@@ -260,6 +289,9 @@
         </div>
     </section>
     @endif
+
+    @include('partials.testimonials-section')
+    @include('partials.partners-section')
 
     @if($posts->isNotEmpty())
     <section id="news-part" class="pt-115 pb-110">

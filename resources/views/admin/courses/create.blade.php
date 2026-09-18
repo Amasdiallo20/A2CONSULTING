@@ -82,8 +82,8 @@
                         <label for="delivery_mode" class="form-label">Format *</label>
                         <select class="form-select @error('delivery_mode') is-invalid @enderror"
                                 id="delivery_mode" name="delivery_mode" required>
-                            @foreach(\App\Models\Course::DELIVERY_MODES as $value => $label)
-                                <option value="{{ $value }}" {{ old('delivery_mode', 'hybride') === $value ? 'selected' : '' }}>{{ $label }}</option>
+                            @foreach(\App\Models\Course::DELIVERY_MODES as $modeValue => $modeLabel)
+                                <option value="{{ $modeValue }}" {{ old('delivery_mode', 'hybride') === $modeValue ? 'selected' : '' }}>{{ $modeLabel }}</option>
                             @endforeach
                         </select>
                         @error('delivery_mode')

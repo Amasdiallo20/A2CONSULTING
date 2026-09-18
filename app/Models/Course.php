@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Facades\Schema;
 
 class Course extends Model
 {
@@ -89,6 +91,65 @@ class Course extends Model
     public function registrations()
     {
         return $this->hasMany(CourseRegistration::class);
+    }
+
+    public function ratings(): HasMany
+    {
+        return $this->hasMany(CourseRating::class);
+    }
+
+    public function scopeWithRatingStats($query)
+    {
+        if (! Schema::hasTable('course_ratings')) {
+            return $query;
+        }
+
+        return $query->withAvg('ratings', 'rating')->withCount('ratings');
+    }
+
+    public function ratingAverage(): float
+    {
+        $avg = $this->ratings_avg_rating ?? null;
+
+        if ($avg === null && Schema::hasTable('course_ratings')) {
+            $avg = $this->ratings()->avg('rating');
+        }
+
+        return round((float) ($avg ?? 0), 1);
+    }
+
+    public function ratingCount(): int
+    {
+        if (isset($this->ratings_count)) {
+            return (int) $this->ratings_count;
+        }
+
+        if (! Schema::hasTable('course_ratings')) {
+            return 0;
+        }
+
+        return (int) $this->ratings()->count();
+    }
+
+    /**
+     * @return list<'full'|'half'|'empty'>
+     */
+    public function ratingStarStates(): array
+    {
+        $average = $this->ratingAverage();
+        $states = [];
+
+        for ($star = 1; $star <= 5; $star++) {
+            if ($average >= $star) {
+                $states[] = 'full';
+            } elseif ($average >= $star - 0.5) {
+                $states[] = 'half';
+            } else {
+                $states[] = 'empty';
+            }
+        }
+
+        return $states;
     }
 
     public const DELIVERY_MODES = [

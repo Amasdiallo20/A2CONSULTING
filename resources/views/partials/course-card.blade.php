@@ -21,6 +21,7 @@
             <span>{{ $course->category->name }}</span>
         @endif
         <a href="{{ route('courses.show', $course->id) }}"><h4>{{ $course->title }}</h4></a>
+        @include('partials.course-stars', ['course' => $course, 'compact' => true])
         <div class="course-teacher">
             @if($course->teacher)
             <div class="thum">

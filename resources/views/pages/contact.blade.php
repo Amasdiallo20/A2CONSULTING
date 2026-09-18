@@ -1,11 +1,20 @@
 @extends('layouts.app')
 @section('title', 'Contact')
+@section('meta_description', 'Contactez A2 Consulting à Conakry : formation, conseil et accompagnement.')
+@section('og_image', share_asset_url($site?->pageBanner('contact') ?? 'images/page-banner-1.jpg'))
+@section('canonical', route('contact'))
 @section('content')
     @include('partials.preloader')
     @include('partials.page-banner', ['title' => 'Contact', 'subtitle' => 'Une question ? Écrivons-nous', 'bannerKey' => 'contact'])
 
     <section id="contact-page" class="pt-90 pb-120 gray-bg">
         <div class="container">
+            @include('partials.share-bar', [
+                'url' => route('contact'),
+                'title' => 'Contact A2 Consulting',
+                'text' => 'Contactez A2 Consulting pour vos formations et services.',
+                'compact' => true,
+            ])
             <div class="row">
                 <div class="col-lg-7">
                     <div class="contact-from mt-30">
@@ -40,7 +49,7 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="singel-form form-group">
-                                            <input name="subject" type="text" placeholder="Sujet" value="{{ old('subject') }}" maxlength="255">
+                                            <input name="subject" type="text" placeholder="Sujet" value="{{ old('subject', request('sujet')) }}" maxlength="255">
                                             @error('subject')<div class="text-danger">{{ $message }}</div>@enderror
                                         </div>
                                     </div>

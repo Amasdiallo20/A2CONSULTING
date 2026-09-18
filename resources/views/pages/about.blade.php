@@ -64,4 +64,7 @@
         </div>
     </section>
     @endif
+
+    @include('partials.testimonials-section')
+    @include('partials.partners-section')
 @endsection

@@ -45,6 +45,7 @@
                                 </li>
                             </ul>
                         </div>
+                        @include('partials.course-rate', ['course' => $course, 'visitorRating' => $visitorRating ?? null])
                         <div class="corses-singel-image pt-50">
                             <img src="{{ asset($course->image ?: 'images/course/cu-1.jpg') }}" alt="{{ $course->title }}">
                         </div>
@@ -127,6 +128,7 @@
                                 </div>
                                 <div class="cont">
                                     <a href="{{ route('courses.show', $related->id) }}"><h4>{{ $related->title }}</h4></a>
+                                    @include('partials.course-stars', ['course' => $related, 'compact' => true])
                                 </div>
                             </div>
                             @endforeach

@@ -15,7 +15,7 @@ class TeacherController extends Controller
 
     public function show($id)
     {
-        $teacher = Teacher::with(['courses' => fn ($q) => $q->active()])->active()->findOrFail($id);
+        $teacher = Teacher::with(['courses' => fn ($q) => $q->active()->withRatingStats()])->active()->findOrFail($id);
 
         return view('pages.teachers-single', compact('teacher'));
     }

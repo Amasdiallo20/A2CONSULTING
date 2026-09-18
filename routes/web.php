@@ -9,6 +9,7 @@ use App\Http\Controllers\CourseRegistrationController;
 use App\Http\Controllers\EventController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ServiceController;
+use App\Http\Controllers\SoftwareProductController;
 use App\Http\Controllers\CartController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\ShopController;
@@ -22,6 +23,7 @@ Route::post('/contact', [ContactController::class, 'store'])->name('contact.stor
 
 Route::get('/courses', [CourseController::class, 'index'])->name('courses.index');
 Route::get('/courses/{id}', [CourseController::class, 'show'])->name('courses.show');
+Route::post('/courses/{id}/note', [CourseController::class, 'rate'])->middleware('throttle:20,1')->name('courses.rate');
 Route::post('/courses/{id}/register', [CourseRegistrationController::class, 'store'])->name('courses.register');
 
 Route::get('/events', [EventController::class, 'index'])->name('events.index');
@@ -52,6 +54,9 @@ Route::match(['post', 'head'], '/paiements/webhook', [CheckoutController::class,
 
 Route::get('/services', [ServiceController::class, 'index'])->name('services.index');
 Route::get('/services/{id}', [ServiceController::class, 'show'])->name('services.show');
+
+Route::get('/logiciels', [SoftwareProductController::class, 'index'])->name('software.index');
+Route::get('/logiciels/{softwareProduct}', [SoftwareProductController::class, 'show'])->name('software.show');
 
 Route::get('/storage/{path}', function (string $path) {
     $base = realpath(storage_path('app/public'));
